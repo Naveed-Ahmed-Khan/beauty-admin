@@ -7,8 +7,10 @@ import eye from "../assets/icons/eye.svg";
 import user from "../assets/icons/user.svg";
 import text from "../assets/images//text.png";
 import Button from "../components/UI/Button";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   return (
     <div className="">
       <div className="-z-40 bg-dark relative">
@@ -64,7 +66,13 @@ const Login = () => {
             />
           </div>
 
-          <Button fullWidth type={"button"}>
+          <Button
+            onClick={() => {
+              navigate("/");
+            }}
+            fullWidth
+            type={"button"}
+          >
             <p className="text-black text-lg font-semibold">Login</p>
           </Button>
         </div>

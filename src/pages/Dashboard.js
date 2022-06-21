@@ -4,6 +4,7 @@ import curve2 from "../assets/images/curve2.png";
 import flower from "../assets/images/flower.png";
 import { Outlet } from "react-router-dom";
 import Home from "./Home";
+import Users from "./Users";
 
 const Dashboard = () => {
   return (
@@ -24,8 +25,7 @@ const Dashboard = () => {
 
       <div className="flex ">
         <Sidebar />
-        {/* <Outlet/> */}
-        <Home />
+        <Outlet />
       </div>
     </div>
   );
