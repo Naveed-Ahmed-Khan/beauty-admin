@@ -1,9 +1,11 @@
 import React from "react";
 import logo from "../assets/images/logo.png";
 import home from "../assets/icons/home.svg";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
+  const location = useLocation();
+
   return (
     <div className="flex flex-row h-full">
       <nav className="bg-light w-40 h-screen justify-between flex flex-col">
@@ -14,8 +16,18 @@ const Sidebar = () => {
           <div className="mt-4 ">
             <ul>
               <li className="my-16 text-center">
-                <NavLink to={"/home"}>
-                  <span className="text-primary opacity-20 hover:opacity-100 mx-auto hover:text-primary transition-all duration-300">
+                <NavLink
+                  className={`${
+                    location.pathname === "/home" &&
+                    "shadow-lg drop-shadow-lg shadow-primary"
+                  } `}
+                  to={"/home"}
+                >
+                  <span
+                    className={`${
+                      location.pathname === "/home" && "opacity-100"
+                    } text-primary opacity-20 hover:opacity-100 mx-auto hover:text-primary transition-all duration-300`}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-8 w-8"
@@ -28,8 +40,13 @@ const Sidebar = () => {
                 </NavLink>
               </li>
               <li className="my-16 text-center">
-                <NavLink to={"/"}>
-                  <span className=" text-primary opacity-20 hover:opacity-100 mx-auto hover:text-primary  transition-all duration-300">
+                <NavLink to={"/approved-appointments"}>
+                  <span
+                    className={`${
+                      location.pathname === "/approved-appointments" &&
+                      "opacity-100"
+                    } text-primary opacity-20 hover:opacity-100 mx-auto hover:text-primary transition-all duration-300`}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-8 w-8"
@@ -47,7 +64,11 @@ const Sidebar = () => {
               </li>
               <li className="my-16 text-center">
                 <NavLink to={"/users"}>
-                  <span className=" text-primary opacity-20 hover:opacity-100 mx-auto hover:text-primary  transition-all duration-300">
+                  <span
+                    className={`${
+                      location.pathname === "/users" && "opacity-100"
+                    } text-primary opacity-20 hover:opacity-100 mx-auto hover:text-primary transition-all duration-300`}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-8 w-8"
@@ -60,8 +81,12 @@ const Sidebar = () => {
                 </NavLink>
               </li>
               <li className="my-16 text-center">
-                <NavLink to={"/"}>
-                  <span className=" text-primary opacity-20 hover:opacity-100 mx-auto hover:text-primary  transition-all duration-300">
+                <NavLink to={"/user-details"}>
+                  <span
+                    className={`${
+                      location.pathname === "/user-details" && "opacity-100"
+                    } text-primary opacity-20 hover:opacity-100 mx-auto hover:text-primary transition-all duration-300`}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-8 w-8"
@@ -82,7 +107,11 @@ const Sidebar = () => {
         </div>
         <div className="mb-4 grid place-content-center ">
           <NavLink to={"/login"}>
-            <span className="text-primary hover:text-primary-dark mx-auto transition-all duration-300">
+            <span
+              className={`${
+                location.pathname === "/login" && "opacity-100"
+              } text-primary opacity-20 hover:opacity-100 mx-auto hover:text-primary transition-all duration-300`}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-8 w-8"

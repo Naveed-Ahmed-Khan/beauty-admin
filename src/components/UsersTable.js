@@ -5,7 +5,9 @@ const UsersTable = ({ rows }) => {
     <div className="container mx-auto px-4 sm:px-8 max-w-3xl">
       <div className="">
         <div className="flex flex-row mb-1 sm:mb-0 items-center justify-between w-full">
-          <h2 className="text-2xl leading-tight">Users</h2>
+          <h2 className="text-3xl text-primary font-medium leading-tight">
+            All Users
+          </h2>
           <div className="text-end">
             <form className="flex flex-col md:flex-row w-3/4 md:w-full max-w-sm md:space-x-3 md:space-y-0 justify-center">
               <input

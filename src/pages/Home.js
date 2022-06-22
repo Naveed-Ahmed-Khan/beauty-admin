@@ -1,26 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import AppointmentsTable from "../components/AppointmentsTable";
+import ApprovedTable from "../components/ApprovedTable";
+import AvailabilityTable from "../components/AvailabilityTable";
 import Table from "../components/Table";
 import Spinner from "../components/UI/Spinner";
 import UsersTable from "../components/UsersTable";
+import { useStateContext } from "../contexts/ContextProvider";
 import useFetch from "../hooks/useFetch";
 
 const Home = () => {
-  const { data: users, isloading } = useFetch("Users", true);
-  console.log(users);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { data: availabilityData } = useFetch("weekstatus", true);
+  const { users, appointments } = useStateContext();
 
   return (
     <>
-      {isloading ? (
+      {isLoading ? (
         <div>
           <Spinner />
         </div>
       ) : (
         <div className="mt-10 flex-auto grid place-content-center grid-cols-1 lg:grid-cols-2 text-white text-7xl">
           <UsersTable rows={users} />
-          {/* <Table header={"All Users"} /> */}
-          <Table header={"Appointments"} />
-          <Table header={"Availability"} />
-          <Table header={"Approved Appointments"} />
+          <AppointmentsTable rows={appointments} />
+          <AvailabilityTable rows={availabilityData} />
+          <ApprovedTable rows={appointments} />
         </div>
       )}
     </>

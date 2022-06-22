@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import Approved from "./pages/Approved";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -14,6 +15,7 @@ function App() {
       <Route path="/" element={<Dashboard />}>
         <Route index element={<Home />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/approved-appointments" element={<Approved />} />
         <Route path="/users" element={<Users />} />
       </Route>
     </Routes>

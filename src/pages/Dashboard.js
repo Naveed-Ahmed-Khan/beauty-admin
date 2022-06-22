@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import curve2 from "../assets/images/curve2.png";
 import flower from "../assets/images/flower.png";
 import { Outlet } from "react-router-dom";
-import Home from "./Home";
-import Users from "./Users";
+import useFetch from "../hooks/useFetch";
+import { useStateContext } from "../contexts/ContextProvider";
 
 const Dashboard = () => {
   return (

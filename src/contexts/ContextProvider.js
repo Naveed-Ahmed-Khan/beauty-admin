@@ -1,65 +1,83 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import useFetch from "../hooks/useFetch";
 
 const StateContext = createContext();
 
-const initialState = {
-  chat: false,
-  cart: false,
-  userProfile: false,
-  notification: false,
-};
-
 export const ContextProvider = ({ children }) => {
-  const [screenSize, setScreenSize] = useState(undefined);
-  const [currentColor, setCurrentColor] = useState("#FF5C8E");
-  const [currentUser, setCurrentUser] = useState("");
-  const [currentMode, setCurrentMode] = useState("Light");
-  const [themeSettings, setThemeSettings] = useState(false);
-  const [activeMenu, setActiveMenu] = useState(true);
-  const [isClicked, setIsClicked] = useState(initialState);
+  const [check, setCheck] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [availability, setAvailability] = useState([]);
+  const [appointments, setAppointments] = useState([]);
 
-  const setMode = (e) => {
-    setCurrentMode(e.target.value);
-    localStorage.setItem("themeMode", e.target.value);
+  const { data: usersData } = useFetch("Users", check);
+  const { data: appointmentsData } = useFetch("appointments", check);
+  const { data: availabilityData } = useFetch("weekstatus", check);
+
+  const updateCheck = () => {
+    setCheck(!check);
   };
 
-  const setColor = (color) => {
-    setCurrentColor(color);
-    localStorage.setItem("colorMode", color);
+  const updateUsers = (data) => {
+    setUsers(data);
+  };
+  const updateAppointments = (id, approved) => {
+    console.log(id + " " + approved);
+    appointments.forEach((appointment) => {
+      if (appointment.id === id) {
+        console.log(appointment);
+        appointment.isApproved = approved;
+      }
+    });
+    console.log(appointments);
+    setAppointments(appointments);
+  };
+  const updateAvailability = (id, start, end) => {
+    console.log(start + " " + end);
+    availability.forEach((avail) => {
+      if (avail.id === id) {
+        console.log(avail);
+        avail.bookingStart = start;
+        avail.bookingEnd = end;
+      }
+    });
+    console.log(availability);
+    setAvailability(availability);
+  };
+  const updateOffday = (id, offday) => {
+    console.log(offday);
+    availability.forEach((avail) => {
+      if (avail.id === id) {
+        console.log(avail);
+        avail.isOffday = offday;
+      }
+    });
+    console.log(availability);
+    setAvailability(availability);
   };
 
-  const handleClick = (clicked) =>
-    setIsClicked({ ...initialState, [clicked]: true });
+  useEffect(() => {
+    const initialize = () => {
+      setUsers(usersData);
+      setAppointments(appointmentsData);
+      setAvailability(availabilityData);
+    };
+    initialize();
+    // setIsLoading(false);
+  }, [appointmentsData, usersData, availabilityData]);
 
-  const handleClickFalse = (clicked) =>
-    setIsClicked({ ...initialState, [clicked]: false });
-
-  const setUser = (selectedUser) => {
-    setCurrentUser(selectedUser);
-  };
-
+  console.log(appointments);
+  console.log(users);
   return (
     <StateContext.Provider
       value={{
-        currentColor,
-        currentMode,
-        activeMenu,
-        screenSize,
-        setScreenSize,
-        handleClick,
-        handleClickFalse,
-        isClicked,
-        initialState,
-        setIsClicked,
-        setActiveMenu,
-        setCurrentColor,
-        setCurrentMode,
-        setMode,
-        setColor,
-        themeSettings,
-        setThemeSettings,
-        currentUser,
-        setUser,
+        users,
+        appointments,
+        availability,
+        updateCheck,
+        updateAppointments,
+        updateAvailability,
+        updateOffday,
+        updateUsers,
       }}
     >
       {children}

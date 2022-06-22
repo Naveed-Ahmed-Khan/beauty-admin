@@ -23,6 +23,12 @@ module.exports = {
         primary: "#ECE986",
         "primary-dark": "#ACA057",
       },
+      boxShadowColor: {
+        dark: "#151515",
+        light: "#252424",
+        primary: "#ECE986",
+        "primary-dark": "#ACA057",
+      },
       borderWidth: {
         1: "1px",
       },
