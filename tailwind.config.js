@@ -29,6 +29,13 @@ module.exports = {
         primary: "#ECE986",
         "primary-dark": "#ACA057",
       },
+      ringColor: {
+        dark: "#151515",
+        light: "#252424",
+        primary: "#ECE986",
+        "primary-dark": "#ACA057",
+      },
+
       borderWidth: {
         1: "1px",
       },
@@ -67,4 +74,7 @@ module.exports = {
     },
   },
   plugins: [require("tailwind-scrollbar"), require("@tailwindcss/forms")],
+  variants: {
+    scrollbar: ["rounded"],
+  },
 };

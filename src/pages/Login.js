@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import curve from "../assets/images/curve.png";
 import brush from "../assets/images/brush.png";
 import logo from "../assets/images/logo.png";
@@ -8,9 +8,29 @@ import user from "../assets/icons/user.svg";
 import text from "../assets/images//text.png";
 import Button from "../components/UI/Button";
 import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../api/firebase-config";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const login = async (email, password) => {
+    try {
+      const user = await signInWithEmailAndPassword(auth, email, password);
+      console.log(user);
+      localStorage.setItem("isLoggedIn", true);
+      navigate("/home");
+    } catch (error) {
+      console.log(error.message);
+      setErrorMessage(error.message);
+      // alert("invalid");
+    }
+  };
+
   return (
     <div className="">
       <div className="-z-40 bg-dark relative">
@@ -32,8 +52,10 @@ const Login = () => {
           <img className="object-contain" src={logo} alt="" />
           <img className="object-contain" src={text} alt="" />
         </div>
-
-        <div className="mt-15 space-y-7 lg:mt-20 lg:space-y-10 ">
+        <div className="mt-4 -mb-4 text-lg text-center text-red-500 transition-all duration-500 scale-100">
+          {errorMessage.length > 0 && <p>{"Invalid Credentials"}</p>}
+        </div>
+        <div className="mt-14 space-y-7 lg:mt-20 lg:space-y-10 ">
           <div className="relative flex flex-col gap-1 items">
             <img
               className="absolute top-6 left-5 object-contain w-5"
@@ -41,10 +63,16 @@ const Login = () => {
               alt=""
             />
             <input
+              autocomplete="off"
               className={`text-white bg-dark border-2 border-tertitary rounded outline-none ring-0 placeholder-white placeholder:font-medium placeholder:text-lg
                             focus:border-2 focus:border-primary-dark caret-white
                              md:py-5 md:px-14 transition-all duration-200`}
               placeholder="Username"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setErrorMessage("");
+              }}
             />
           </div>
           <div className="relative flex flex-col gap-1 items">
@@ -57,18 +85,26 @@ const Login = () => {
               className="absolute top-7 right-5 object-contain w-6"
               src={eye}
               alt=""
+              onClick={() => setShowPassword(!showPassword)}
             />
             <input
+              autocomplete="off"
               className={`text-white border-2 border-primary-dark bg-dark rounded outline-none ring-0 placeholder-primary-dark placeholder:font-medium placeholder:text-lg
-                        focus:border-2 focus:border-primary-dark focus:placeholder-primary-dark caret-white
+                        focus:border-2 focus:border-primary-dark focus:placeholder-primary-dark focus:ring-0 caret-white
                          md:py-5 md:px-14 transition-all duration-200`}
               placeholder="Password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setErrorMessage("");
+              }}
             />
           </div>
 
           <Button
             onClick={() => {
-              navigate("/");
+              login(email, password);
             }}
             fullWidth
             type={"button"}

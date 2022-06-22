@@ -15,20 +15,12 @@ const Home = () => {
   const { users, appointments } = useStateContext();
 
   return (
-    <>
-      {isLoading ? (
-        <div>
-          <Spinner />
-        </div>
-      ) : (
-        <div className="mt-10 flex-auto grid place-content-center grid-cols-1 lg:grid-cols-2 text-white text-7xl">
-          <UsersTable rows={users} />
-          <AppointmentsTable rows={appointments} />
-          <AvailabilityTable rows={availabilityData} />
-          <ApprovedTable rows={appointments} />
-        </div>
-      )}
-    </>
+    <div className="pt-[4vh] flex-auto grid place-content-center grid-cols-1 xl:grid-cols-2 text-white text-7xl">
+      <UsersTable rows={users} />
+      <AppointmentsTable rows={appointments} />
+      <AvailabilityTable rows={availabilityData} />
+      <ApprovedTable rows={appointments} />
+    </div>
   );
 };
 

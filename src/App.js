@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import Appointments from "./pages/Appointments";
 import Approved from "./pages/Approved";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
@@ -13,10 +14,10 @@ function App() {
       <Route path="/login" element={<Login />} />
 
       <Route path="/" element={<Dashboard />}>
-        <Route index element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/approved-appointments" element={<Approved />} />
         <Route path="/users" element={<Users />} />
+        <Route path="/appointments" element={<Appointments />} />
       </Route>
     </Routes>
   );

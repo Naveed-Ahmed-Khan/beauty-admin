@@ -2,12 +2,14 @@ import React from "react";
 import logo from "../assets/images/logo.png";
 import home from "../assets/icons/home.svg";
 import { NavLink, useLocation } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../api/firebase-config";
 
 const Sidebar = () => {
   const location = useLocation();
 
   return (
-    <div className="flex flex-row h-full">
+    <div className="flex flex-row fixed h-screen">
       <nav className="bg-light w-40 h-screen justify-between flex flex-col">
         <div className="flex flex-col items-center justify-center mt-10 mb-10">
           <NavLink to={"/"}>
@@ -81,10 +83,10 @@ const Sidebar = () => {
                 </NavLink>
               </li>
               <li className="my-16 text-center">
-                <NavLink to={"/user-details"}>
+                <NavLink to={"/appointments"}>
                   <span
                     className={`${
-                      location.pathname === "/user-details" && "opacity-100"
+                      location.pathname === "/appointments" && "opacity-100"
                     } text-primary opacity-20 hover:opacity-100 mx-auto hover:text-primary transition-all duration-300`}
                   >
                     <svg
@@ -106,7 +108,13 @@ const Sidebar = () => {
           </div>
         </div>
         <div className="mb-4 grid place-content-center ">
-          <NavLink to={"/login"}>
+          <NavLink
+            onClick={async () => {
+              localStorage.removeItem("isLoggedIn");
+              await signOut(auth);
+            }}
+            to={"/login"}
+          >
             <span
               className={`${
                 location.pathname === "/login" && "opacity-100"
