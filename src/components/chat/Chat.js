@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { db } from "../../api/firebase-config";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -8,7 +8,6 @@ import {
   collection,
   limit,
   orderBy,
-  getDocs,
   where,
   addDoc,
   serverTimestamp,
@@ -146,16 +145,20 @@ const Chat = ({ setIsChatOpen }) => {
                 {messages?.map((message) => {
                   return (
                     <>
-                      {message.from === "admin" ? (
+                      {message.senderId === "admin" ? (
                         <li className="h-fit flex justify-end">
                           <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-gray-100 rounded shadow">
-                            <span className="block">{message?.msg}</span>
+                            <span className="block">
+                              {message?.messageBody}
+                            </span>
                           </div>
                         </li>
                       ) : (
                         <li className="h-fit flex justify-start">
                           <div className="relative max-w-xl px-4 py-2 text-white bg-gray-700  rounded shadow">
-                            <span className="block">{message?.msg}</span>
+                            <span className="block">
+                              {message?.messageBody}
+                            </span>
                           </div>
                         </li>
                       )}
@@ -229,9 +232,9 @@ const Chat = ({ setIsChatOpen }) => {
                   if (enteredText.trim().length > 0 && selectedUser.username) {
                     setEnteredText("");
                     await addDoc(collection(db, "messages"), {
-                      from: "admin",
-                      to: selectedUser?.id,
-                      msg: enteredText,
+                      senderId: "admin",
+                      recieverId: selectedUser?.id,
+                      messageBody: enteredText,
                       chatId: selectedUser?.id,
                       createdAt: serverTimestamp(),
                     });
