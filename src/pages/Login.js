@@ -10,6 +10,8 @@ import Button from "../components/UI/Button";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../api/firebase-config";
+import { useStateContext } from "../contexts/ContextProvider";
+import { useAuth } from "../contexts/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,10 +20,25 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const login = async (email, password) => {
+  const { setCurrentUser } = useStateContext();
+  const { login } = useAuth();
+
+  const signIn = async (email, password) => {
     try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
+      setErrorMessage("");
+      await login(email, password);
       console.log(user);
+      navigate("/home");
+    } catch (error) {
+      console.log(error);
+      setErrorMessage(error.message);
+    }
+  };
+  /* const login = async (email, password) => {
+    try {
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
+      console.log(user);
+      setCurrentUser(user);
       localStorage.setItem("isLoggedIn", true);
       navigate("/home");
     } catch (error) {
@@ -29,7 +46,7 @@ const Login = () => {
       setErrorMessage(error.message);
       // alert("invalid");
     }
-  };
+  }; */
 
   return (
     <div className="">
@@ -104,7 +121,7 @@ const Login = () => {
 
           <Button
             onClick={() => {
-              login(email, password);
+              signIn(email, password);
             }}
             fullWidth
             type={"button"}

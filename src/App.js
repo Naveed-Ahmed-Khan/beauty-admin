@@ -4,6 +4,7 @@ import Approved from "./pages/Approved";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import UserDetails from "./pages/UserDetails";
 import Users from "./pages/Users";
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/approved-appointments" element={<Approved />} />
         <Route path="/users" element={<Users />} />
-        <Route path="/appointments" element={<Appointments />} />
+        <Route path="/admin" element={<UserDetails />} />
       </Route>
     </Routes>
   );

@@ -83,10 +83,10 @@ const Sidebar = () => {
                 </NavLink>
               </li>
               <li className="my-16 text-center">
-                <NavLink to={"/appointments"}>
+                <NavLink to={"/admin"}>
                   <span
                     className={`${
-                      location.pathname === "/appointments" && "opacity-100"
+                      location.pathname === "/admin" && "opacity-100"
                     } text-primary opacity-20 hover:opacity-100 mx-auto hover:text-primary transition-all duration-300`}
                   >
                     <svg
@@ -110,7 +110,6 @@ const Sidebar = () => {
         <div className="mb-4 grid place-content-center ">
           <NavLink
             onClick={async () => {
-              localStorage.removeItem("isLoggedIn");
               await signOut(auth);
             }}
             to={"/login"}

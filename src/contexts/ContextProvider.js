@@ -8,6 +8,7 @@ export const ContextProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
   const [availability, setAvailability] = useState([]);
   const [appointments, setAppointments] = useState([]);
+  const [currentUser, setCurrentUser] = useState([]);
 
   const { data: usersData } = useFetch("Users", check);
   const { data: appointmentsData } = useFetch("appointments", check);
@@ -19,6 +20,9 @@ export const ContextProvider = ({ children }) => {
 
   const updateUsers = (data) => {
     setUsers(data);
+  };
+  const updateCurrentUser = (data) => {
+    setCurrentUser(data);
   };
   const updateAppointments = (id, approved) => {
     console.log(id + " " + approved);
@@ -70,9 +74,11 @@ export const ContextProvider = ({ children }) => {
   return (
     <StateContext.Provider
       value={{
+        currentUser,
         users,
         appointments,
         availability,
+        setCurrentUser,
         updateCheck,
         updateAppointments,
         updateAvailability,
