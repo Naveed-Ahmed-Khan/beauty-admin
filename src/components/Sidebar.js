@@ -18,17 +18,13 @@ const Sidebar = () => {
           <div className="mt-4 ">
             <ul>
               <li className="my-16 text-center">
-                <NavLink
-                  className={`${
-                    location.pathname === "/home" &&
-                    "shadow-lg drop-shadow-lg shadow-primary"
-                  } `}
-                  to={"/home"}
-                >
+                <NavLink to={"/home"}>
                   <span
                     className={`${
-                      location.pathname === "/home" && "opacity-100"
-                    } text-primary opacity-20 hover:opacity-100 mx-auto hover:text-primary transition-all duration-300`}
+                      location.pathname === "/home"
+                        ? "opacity-100"
+                        : "opacity-20"
+                    } text-primary hover:opacity-100 mx-auto hover:text-primary transition-all duration-300`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -45,9 +41,10 @@ const Sidebar = () => {
                 <NavLink to={"/approved-appointments"}>
                   <span
                     className={`${
-                      location.pathname === "/approved-appointments" &&
-                      "opacity-100"
-                    } text-primary opacity-20 hover:opacity-100 mx-auto hover:text-primary transition-all duration-300`}
+                      location.pathname === "/approved-appointments"
+                        ? "opacity-100"
+                        : "opacity-20"
+                    } text-primary  hover:opacity-100 mx-auto hover:text-primary transition-all duration-300`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -68,8 +65,10 @@ const Sidebar = () => {
                 <NavLink to={"/users"}>
                   <span
                     className={`${
-                      location.pathname === "/users" && "opacity-100"
-                    } text-primary opacity-20 hover:opacity-100 mx-auto hover:text-primary transition-all duration-300`}
+                      location.pathname === "/users"
+                        ? "opacity-100"
+                        : "opacity-20"
+                    } text-primary  hover:opacity-100 mx-auto hover:text-primary transition-all duration-300`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -86,8 +85,10 @@ const Sidebar = () => {
                 <NavLink to={"/admin"}>
                   <span
                     className={`${
-                      location.pathname === "/admin" && "opacity-100"
-                    } text-primary opacity-20 hover:opacity-100 mx-auto hover:text-primary transition-all duration-300`}
+                      location.pathname === "/admin"
+                        ? "opacity-100"
+                        : "opacity-20"
+                    } text-primary  hover:opacity-100 mx-auto hover:text-primary transition-all duration-300`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -117,7 +118,7 @@ const Sidebar = () => {
             <span
               className={`${
                 location.pathname === "/login" && "opacity-100"
-              } text-primary opacity-20 hover:opacity-100 mx-auto hover:text-primary transition-all duration-300`}
+              } text-primary  hover:opacity-100 mx-auto hover:text-primary transition-all duration-300`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
