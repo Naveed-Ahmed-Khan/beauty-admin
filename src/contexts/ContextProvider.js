@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import useAppointments from "../hooks/useAppointments";
 import useFetch from "../hooks/useFetch";
 
 const StateContext = createContext();
@@ -11,8 +12,10 @@ export const ContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState([]);
 
   const { data: usersData } = useFetch("Users", check);
-  const { data: appointmentsData } = useFetch("appointments", check);
   const { data: availabilityData } = useFetch("weekstatus", check);
+  const { data: appointmentsData } = useAppointments();
+
+  console.log(appointmentsData);
 
   const updateCheck = () => {
     setCheck(!check);

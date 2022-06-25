@@ -19,7 +19,7 @@ const Home = () => {
       <UsersTable rows={users} />
       <AppointmentsTable rows={appointments} />
       <AvailabilityTable rows={availabilityData} />
-      <ApprovedTable rows={appointments} />
+      {/* <ApprovedTable rows={appointments} /> */}
     </div>
   );
 };

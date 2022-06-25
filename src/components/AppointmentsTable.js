@@ -1,5 +1,14 @@
-import { collection, doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  limit,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 import { db } from "../api/firebase-config";
 import { useStateContext } from "../contexts/ContextProvider";
 
@@ -7,7 +16,12 @@ const AppointmentsTable = ({ rows }) => {
   const { users, appointments, updateAppointments, updateCheck } =
     useStateContext();
 
+  console.log(appointments);
+
   const [filterValue, setFilterValue] = useState("");
+
+  const [isloading, setIsloading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const setAppointment = async (userId, approved) => {
     const appointmentsCollectionRef = collection(db, "appointments");
@@ -98,9 +112,9 @@ const AppointmentsTable = ({ rows }) => {
                 </tr>
               </thead>
               <tbody className="overflow-y-auto">
-                {appointments.map((user) => {
+                {/* {appointments.map((item) => {
                   let selectedUser = users?.filter(
-                    (usr) => usr?.id === user?.userId
+                    (usr) => usr?.id === item.user?.id
                   );
                   console.log(selectedUser);
                   if (filterValue.length > 0) {
@@ -113,103 +127,97 @@ const AppointmentsTable = ({ rows }) => {
 
                   return (
                     <>
-                      {user.isApproved === false && selectedUser.length > 0 && (
-                        <tr>
-                          {console.log(user)}
-                          <td className="px-5 py-2 text-center border-b border-white border-opacity-50 text-sm">
-                            <div className=" flex items-center">
-                              <div className="flex-shrink-0">
-                                <div className="block relative">
-                                  {/* <img
-                                    alt="profil"
-                                    src="/images/person/8.jpg"
-                                    className="mx-auto object-cover rounded-full "
-                                  /> */}
-                                  <svg
-                                    width="16"
-                                    height="16"
-                                    viewBox="0 0 16 16"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      d="M8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8ZM8 10C5.33 10 0 11.34 0 14V15C0 15.55 0.45 16 1 16H15C15.55 16 16 15.55 16 15V14C16 11.34 10.67 10 8 10Z"
-                                      fill="white"
-                                    />
-                                  </svg>
+                      {item.order[0].confirmed === false &&
+                        selectedUser.length > 0 && (
+                          <tr>
+                            {console.log(item)}
+                            <td className="px-5 py-2 text-center border-b border-white border-opacity-50 text-sm">
+                              <div className=" flex items-center">
+                                <div className="flex-shrink-0">
+                                  <div className="block relative">
+                                    <svg
+                                      width="16"
+                                      height="16"
+                                      viewBox="0 0 16 16"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        d="M8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8ZM8 10C5.33 10 0 11.34 0 14V15C0 15.55 0.45 16 1 16H15C15.55 16 16 15.55 16 15V14C16 11.34 10.67 10 8 10Z"
+                                        fill="white"
+                                      />
+                                    </svg>
+                                  </div>
+                                </div>
+                                <div className="ml-3">
+                                  <p className="text-white whitespace-no-wrap">
+                                    {selectedUser[0]?.username}
+                                  </p>
                                 </div>
                               </div>
-                              <div className="ml-3">
-                                <p className="text-white whitespace-no-wrap">
-                                  {/* {user.userId} */}
-                                  {selectedUser[0]?.username}
-                                </p>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-5 py-2 text-center border-b border-white border-opacity-50 text-sm">
-                            <p className="text-white whitespace-no-wrap">
-                              {user.appointment.toDate().toLocaleTimeString()}
-                            </p>
-                          </td>
-                          <td className="px-5 py-2 text-center border-b border-white border-opacity-50 text-sm">
-                            <p className="text-white whitespace-no-wrap">
-                              {weekday[user.appointment.toDate().getDay()]}
-                              {/* {new Date(user.appointment).toLocaleTimeString().} */}
-                            </p>
-                          </td>
-                          <td className="px-5 py-2 text-center border-b border-white border-opacity-50 text-sm">
-                            <div className="flex items-center justify-center">
-                              <button
-                                onClick={() => {
-                                  setAppointment(user.id, true);
-                                  updateAppointments(user.id, true);
-                                  updateCheck();
-                                }}
-                                className="mr-6 text-white hover:text-blue-500"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-6 w-6"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
+                            </td>
+                            <td className="px-5 py-2 text-center border-b border-white border-opacity-50 text-sm">
+                              <p className="text-white whitespace-no-wrap">
+                                {item.order[0].Time}
+                              </p>
+                            </td>
+                            <td className="px-5 py-2 text-center border-b border-white border-opacity-50 text-sm">
+                              <p className="text-white whitespace-no-wrap">
+                                {item.order[0].Date}
+                              </p>
+                            </td>
+                            <td className="px-5 py-2 text-center border-b border-white border-opacity-50 text-sm">
+                              <div className="flex items-center justify-center">
+                                <button
+                                  onClick={() => {
+                                    // setAppointment(item.user.id, true);
+                                    // updateAppointments(item.user.id, true);
+                                    // updateCheck();
+                                  }}
+                                  className="mr-6 text-white hover:text-primary"
                                 >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                              </button>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-6 w-6"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                </button>
 
-                              <button
-                                onClick={() => {
-                                  setAppointment(user.id, false);
-                                  updateAppointments(user.id, false);
-                                  updateCheck();
-                                }}
-                                className=" text-white hover:text-red-500"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-6 w-6"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
+                                <button
+                                  onClick={() => {
+                                    // setAppointment(item.user.id, false);
+                                    // updateAppointments(item.user.id, false);
+                                    // updateCheck();
+                                  }}
+                                  className=" text-white hover:text-red-500"
                                 >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-6 w-6"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
                     </>
                   );
-                })}
+                })} */}
               </tbody>
             </table>
           </div>

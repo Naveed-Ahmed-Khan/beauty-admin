@@ -166,7 +166,7 @@ const ApprovedTable = ({ rows }) => {
                                   updateAppointments(user.id, true);
                                   updateCheck();
                                 }} */
-                                className="mr-6 text-white hover:text-blue-500"
+                                className="mr-6 text-white hover:text-primary"
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"

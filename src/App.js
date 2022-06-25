@@ -1,6 +1,8 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import Chat from "./components/chat/Chat";
 import Appointments from "./pages/Appointments";
 import Approved from "./pages/Approved";
+import ChatPage from "./pages/ChatPage";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -19,6 +21,7 @@ function App() {
         <Route path="/approved-appointments" element={<Approved />} />
         <Route path="/users" element={<Users />} />
         <Route path="/admin" element={<UserDetails />} />
+        <Route path="/chat" element={<ChatPage />} />
       </Route>
     </Routes>
   );

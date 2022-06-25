@@ -1,7 +1,4 @@
-import { collection, doc, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { db } from "../api/firebase-config";
-import { useStateContext } from "../contexts/ContextProvider";
 import logo from "../assets/images/logo.png";
 import Button from "../components/UI/Button";
 import { useAuth } from "../contexts/AuthContext";
@@ -41,12 +38,12 @@ const UserDetails = ({ rows }) => {
 
   return (
     <div className="mt-[10vh] max-w-screen-lg container mx-auto px-4 sm:px-8  ">
-      <div className="mb-10 flex flex-row items-center justify-between w-full">
+      <div className="mb-4 md:mb-10 flex flex-col md:flex-row gap-6 md:gap-6 items-center justify-between w-full">
         <h2 className="text-4xl text-primary font-semibold leading-tight">
           Admin Profile
         </h2>
         <div className="text-end">
-          <div className="relative flex items-center md:flex-row w-[90%] md:w-full max-w-sm md:space-x-3 md:space-y-0 justify-center">
+          <div className="relative flex items-center md:flex-row w-full md:w-full max-w-sm space-x-8 md:space-x-4 md:space-y-0 justify-center">
             {isEditing ? (
               <>
                 <Button
@@ -88,37 +85,37 @@ const UserDetails = ({ rows }) => {
               <img className="object-contain w-64" src={logo} alt="" />
             </div>
             <div className="border-t-2 border-light flex flex-col">
-              <div className="p-4 flex items-center gap-4">
-                <p className=" w-[10%] text-xl text-primary font-medium">
+              <div className="p-4 sm:flex items-center gap-4">
+                <p className=" w-[30%] md:w-[20%] lg:w-[10%] text-xl text-primary font-medium">
                   Name
                 </p>
                 {!isEditing ? (
-                  <p className="pl-4 border-l-2 border-light w-[10%] text-xl text-white font-normal">
+                  <p className="pt-2 sm:pl-4 sm:border-l-2 sm:border-light w-[30%] md:w-[20%] lg:w-[10%] text-xl text-white font-normal">
                     {currentUser.displayName}
                   </p>
                 ) : (
                   <input
                     type="text"
-                    className="w-[90%] text-white py-2 pl-2 pr-8 bg-transparent border-t-0 border-l-0 border-r-0 border-b-2 outline-none ring-0 focus:border-b-primary-dark focus:border-b-2 focus:ring-0"
+                    className="w-[70%] md:w-[80%] lg:w-[90%] text-white py-2 pl-2 pr-8 bg-transparent border-t-0 border-l-0 border-r-0 border-b-2 outline-none ring-0 focus:border-b-primary-dark focus:border-b-2 focus:ring-0"
                     // placeholder={currentUser.displayName}
                     value={userName}
                     onChange={(e) => setUserName(e.target.value)}
                   />
                 )}
               </div>
-              <div className="p-4 flex items-center gap-4">
-                <p className="w-[10%] text-xl text-primary font-medium">
+              <div className="p-4 sm:flex items-center gap-4">
+                <p className="w-[30%] md:w-[20%] lg:w-[10%] text-xl text-primary font-medium">
                   Email
                 </p>
 
                 {!isEditing ? (
-                  <p className="pl-4 border-l-2 border-light w-[10%] text-xl text-white font-normal">
+                  <p className="pt-2 sm:pl-4 sm:border-l-2 sm:border-light w-[30%] md:w-[20%] lg:w-[10%] text-xl text-white font-normal">
                     {currentUser.email}
                   </p>
                 ) : (
                   <input
                     type="text"
-                    className="w-[90%] text-white py-2 pl-2 pr-8 bg-transparent border-t-0 border-l-0 border-r-0 border-b-2 outline-none ring-0 focus:border-b-primary-dark focus:border-b-2 focus:ring-0"
+                    className="w-[70%] md:w-[80%] lg:w-[90%] text-white py-2 pl-2 pr-8 bg-transparent border-t-0 border-l-0 border-r-0 border-b-2 outline-none ring-0 focus:border-b-primary-dark focus:border-b-2 focus:ring-0"
                     // placeholder={currentUser.email}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -130,7 +127,7 @@ const UserDetails = ({ rows }) => {
                   onClick={() => {
                     setError("");
                   }}
-                  className="p-4 flex items-center gap-4 border border-red-500"
+                  className="p-4 sm:flex items-center gap-4 border border-red-500"
                 >
                   <p className="text-lg text-red-500">
                     Something went wrong: {error}
@@ -139,20 +136,20 @@ const UserDetails = ({ rows }) => {
               )}
               {isEditing && (
                 <>
-                  <div className="p-4 flex items-center gap-4">
-                    <p className="w-[10%] text-xl text-primary font-medium">
+                  <div className="p-4 sm:flex items-center gap-4">
+                    <p className="w-[30%] md:w-[20%] lg:w-[10%] text-xl text-primary font-medium">
                       Password
                     </p>
 
                     <input
                       type="text"
-                      className="w-[90%] text-white py-2 pl-2 pr-8 bg-transparent border-t-0 border-l-0 border-r-0 border-b-2 outline-none ring-0 focus:border-b-primary-dark focus:border-b-2 focus:ring-0"
+                      className="w-[70%] md:w-[80%] lg:w-[90%] text-white py-2 pl-2 pr-8 bg-transparent border-t-0 border-l-0 border-r-0 border-b-2 outline-none ring-0 focus:border-b-primary-dark focus:border-b-2 focus:ring-0"
                       placeholder=""
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
-                  <div className="mt-4 p-4 flex items-center gap-4 border rounded-md border-zinc-500">
+                  <div className="mt-4 p-4 sm:flex items-center gap-4 border rounded-md border-zinc-500">
                     <p className="text-lg text-zinc-500">
                       Note: Leave the field empty that you donot wish to update.
                     </p>

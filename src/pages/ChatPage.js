@@ -1,32 +1,22 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
-import { db } from "../../api/firebase-config";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import {
-  query,
-  collection,
-  limit,
-  orderBy,
-  where,
-  addDoc,
-  serverTimestamp,
-} from "firebase/firestore";
-import Backdrop from "../Backdrop";
-import ChatSidebar from "./ChatSidebar";
-import SendMessage from "./SendMessage";
 
-const Chat = ({ setIsChatOpen }) => {
+import { useState } from "react";
+import ChatSidebar from "../components/chat/ChatSidebar";
+import SendMessage from "../components/chat/SendMessage";
+
+const ChatPage = ({ setIsChatOpen }) => {
   const [selectedUser, setSelectedUser] = useState([]);
   const [openChat, setOpenChat] = useState(false);
 
   return (
     <>
-      <div className="container mx-auto">
+      <div className="container mx-auto mt-6 p-4 sm:p-8">
         <div
-          className={` min-w-full bg-light border rounded-2xl lg:grid lg:grid-cols-3 `}
+          className={`min-w-full bg-light border rounded-2xl lg:grid lg:grid-cols-3 `}
         >
-          <div className={`${openChat ? "hidden" : "block"} lg:col-span-1`}>
+          <div
+            className={`${openChat ? "hidden" : "block h-full"} lg:col-span-1`}
+          >
             <ChatSidebar
               setIsChatOpen={setIsChatOpen}
               selectedUser={selectedUser}
@@ -42,7 +32,7 @@ const Chat = ({ setIsChatOpen }) => {
             />
           </div> */}
 
-          {/* Chat */}
+          {/* Page */}
           <div
             className={`${
               openChat ? "block " : "hidden"
@@ -68,4 +58,4 @@ const Chat = ({ setIsChatOpen }) => {
   );
 };
 
-export default Chat;
+export default ChatPage;
