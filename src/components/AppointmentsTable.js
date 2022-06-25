@@ -1,6 +1,8 @@
 import {
   collection,
+  deleteDoc,
   doc,
+  getDoc,
   getDocs,
   limit,
   query,
@@ -18,40 +20,62 @@ const AppointmentsTable = ({ rows }) => {
 
   console.log(appointments);
 
+  const [appointmentData, setAppointmentData] = useState([]);
   const [filterValue, setFilterValue] = useState("");
 
   const [isloading, setIsloading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const setAppointment = async (userId, approved) => {
-    const appointmentsCollectionRef = collection(db, "appointments");
-    const data = doc(appointmentsCollectionRef, userId);
-    await updateDoc(data, {
-      isApproved: approved,
-    });
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsloading(true);
 
-  const weekday = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
+      const docs = [];
+      try {
+        users.forEach(async (user) => {
+          const messageRef = doc(db, "Users", "OrderData");
+          const message = await getDoc(messageRef);
+          console.log(message);
+
+          const userOrder = collection(db, "Users", `${user.id}`, "OrderData");
+
+          const order = await getDocs(userOrder);
+
+          order.docs.forEach((doc) => {
+            docs.push({
+              ...doc.data(),
+              userId: user.id,
+              id: doc.id,
+            });
+          });
+
+          setAppointmentData(docs);
+          setIsloading(false);
+        });
+      } catch (error) {
+        console.log(error);
+        setErrorMessage(error.message);
+        alert(error);
+      }
+    };
+
+    fetchData();
+  }, [users]);
+
+  console.log(appointmentData);
+
   return (
     <div className="container mx-auto px-4 sm:px-8 max-w-3xl">
       <div className="">
-        <div className="flex flex-row mb-1 sm:mb-0 items-center justify-between w-full">
-          <h2 className="text-2xl text-primary font-medium leading-tight">
+        <div className="mb-0 xl:mb-2 sm:flex items-center justify-between w-full">
+          <h2 className="text-2xl sm:text-3xl text-primary font-semibold leading-tight">
             Appointments
           </h2>
-          <div className="text-end">
-            <form className="relative flex items-center md:flex-row w-3/4 md:w-full max-w-sm md:space-x-3 md:space-y-0 justify-center">
+          <div className="mt-6 sm:mt-0 text-end">
+            <form className="relative flex items-center md:flex-row w-full sm:w-fit md:space-x-3 md:space-y-0 ">
               <input
                 type="text"
-                className="text-white py-2 pl-2 pr-8 bg-transparent border-t-0 border-l-0 border-r-0 border-b-2 outline-none ring-0 focus:border-b-primary-dark focus:border-b-2 focus:ring-0"
+                className="text-white py-3 pl-2 pr-8 bg-transparent w-full sm:w-fit border-t-0 border-l-0 border-r-0 border-b-2 outline-none ring-0 focus:border-b-primary-dark focus:border-b-2 focus:ring-0"
                 placeholder="Search"
                 value={filterValue}
                 onChange={(e) => setFilterValue(e.target.value)}
@@ -87,51 +111,60 @@ const AppointmentsTable = ({ rows }) => {
                 <tr className="">
                   <th
                     scope="col"
-                    className="px-5 py-2 text-center border-b-2 border-white border-opacity-50   text-white text-opacity-50 text-lg font-normal"
+                    className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b-2 border-white border-opacity-50   text-white text-opacity-50 text-lg font-normal"
                   >
                     Name
                   </th>
                   <th
                     scope="col"
-                    className="px-5 py-2 text-center border-b-2 border-white border-opacity-50   text-white text-opacity-50 text-lg font-normal"
+                    className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b-2 border-white border-opacity-50   text-white text-opacity-50 text-lg font-normal"
                   >
                     Time
                   </th>
                   <th
                     scope="col"
-                    className="px-5 py-2 text-center border-b-2 border-white border-opacity-50   text-white text-opacity-50 text-lg font-normal"
+                    className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b-2 border-white border-opacity-50   text-white text-opacity-50 text-lg font-normal"
                   >
-                    Day
+                    Date
                   </th>
                   <th
                     scope="col"
-                    className="px-5 py-2 text-center border-b-2 border-white border-opacity-50   text-white text-opacity-50 text-lg font-normal"
+                    className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b-2 border-white border-opacity-50   text-white text-opacity-50 text-lg font-normal"
                   >
                     Approval
                   </th>
                 </tr>
               </thead>
               <tbody className="overflow-y-auto">
-                {/* {appointments.map((item) => {
-                  let selectedUser = users?.filter(
-                    (usr) => usr?.id === item.user?.id
+                {appointments.map((appointment) => {
+                  let selectedUser = users.filter(
+                    (usr) => usr.id === appointment.userId
                   );
-                  console.log(selectedUser);
+                  // console.log(selectedUser);
                   if (filterValue.length > 0) {
-                    selectedUser = selectedUser.filter((selected) =>
+                    /* selectedUser = selectedUser.filter((selected) =>
                       selected.username
                         .toLowerCase()
                         .includes(filterValue.toLowerCase())
-                    );
+                    ); */
+                    selectedUser.forEach((selected) => {
+                      if (
+                        selected.username
+                          .toLowerCase()
+                          .includes(filterValue.toLowerCase())
+                      ) {
+                        selectedUser.push(appointment);
+                      }
+                      console.log(selectedUser);
+                    });
                   }
 
                   return (
                     <>
-                      {item.order[0].confirmed === false &&
-                        selectedUser.length > 0 && (
+                      {selectedUser.length > 0 &&
+                        appointment.confirmed === false && (
                           <tr>
-                            {console.log(item)}
-                            <td className="px-5 py-2 text-center border-b border-white border-opacity-50 text-sm">
+                            <td className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b border-white border-opacity-50 text-sm">
                               <div className=" flex items-center">
                                 <div className="flex-shrink-0">
                                   <div className="block relative">
@@ -156,23 +189,32 @@ const AppointmentsTable = ({ rows }) => {
                                 </div>
                               </div>
                             </td>
-                            <td className="px-5 py-2 text-center border-b border-white border-opacity-50 text-sm">
+                            <td className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b border-white border-opacity-50 text-sm">
                               <p className="text-white whitespace-no-wrap">
-                                {item.order[0].Time}
+                                {appointment?.Time}
                               </p>
                             </td>
-                            <td className="px-5 py-2 text-center border-b border-white border-opacity-50 text-sm">
+                            <td className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b border-white border-opacity-50 text-sm">
                               <p className="text-white whitespace-no-wrap">
-                                {item.order[0].Date}
+                                {appointment?.Date}
                               </p>
                             </td>
-                            <td className="px-5 py-2 text-center border-b border-white border-opacity-50 text-sm">
+                            <td className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b border-white border-opacity-50 text-sm">
                               <div className="flex items-center justify-center">
                                 <button
-                                  onClick={() => {
-                                    // setAppointment(item.user.id, true);
-                                    // updateAppointments(item.user.id, true);
-                                    // updateCheck();
+                                  onClick={async () => {
+                                    const dataRef = doc(
+                                      db,
+                                      "Users",
+                                      `${selectedUser[0]?.id}`,
+                                      "OrderData",
+                                      `${appointment?.id}`
+                                    );
+
+                                    await updateDoc(dataRef, {
+                                      confirmed: true,
+                                    });
+                                    updateCheck();
                                   }}
                                   className="mr-6 text-white hover:text-primary"
                                 >
@@ -191,10 +233,19 @@ const AppointmentsTable = ({ rows }) => {
                                 </button>
 
                                 <button
-                                  onClick={() => {
-                                    // setAppointment(item.user.id, false);
-                                    // updateAppointments(item.user.id, false);
-                                    // updateCheck();
+                                  onClick={async () => {
+                                    const dataRef = doc(
+                                      db,
+                                      "Users",
+                                      `${selectedUser[0]?.id}`,
+                                      "OrderData",
+                                      `${appointment?.id}`
+                                    );
+                                    await updateDoc(dataRef, {
+                                      confirmed: false,
+                                    });
+                                    await deleteDoc(dataRef);
+                                    updateCheck();
                                   }}
                                   className=" text-white hover:text-red-500"
                                 >
@@ -217,7 +268,7 @@ const AppointmentsTable = ({ rows }) => {
                         )}
                     </>
                   );
-                })} */}
+                })}
               </tbody>
             </table>
           </div>

@@ -15,11 +15,11 @@ const Home = () => {
   const { users, appointments } = useStateContext();
 
   return (
-    <div className="pt-[4vh] flex-auto grid place-content-center grid-cols-1 xl:grid-cols-2 text-white text-7xl">
+    <div className="pt-[4vh] flex-auto grid place-content-center gap-8 xl:gap-4 grid-cols-1 xl:grid-cols-2 text-white text-7xl">
       <UsersTable rows={users} />
       <AppointmentsTable rows={appointments} />
       <AvailabilityTable rows={availabilityData} />
-      {/* <ApprovedTable rows={appointments} /> */}
+      <ApprovedTable rows={appointments} />
     </div>
   );
 };

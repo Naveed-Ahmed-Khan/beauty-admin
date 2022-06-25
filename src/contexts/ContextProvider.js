@@ -13,9 +13,9 @@ export const ContextProvider = ({ children }) => {
 
   const { data: usersData } = useFetch("Users", check);
   const { data: availabilityData } = useFetch("weekstatus", check);
-  const { data: appointmentsData } = useAppointments();
+  const { appointmentData } = useAppointments(check);
 
-  console.log(appointmentsData);
+  console.log(appointmentData);
 
   const updateCheck = () => {
     setCheck(!check);
@@ -65,12 +65,12 @@ export const ContextProvider = ({ children }) => {
   useEffect(() => {
     const initialize = () => {
       setUsers(usersData);
-      setAppointments(appointmentsData);
+      setAppointments(appointmentData);
       setAvailability(availabilityData);
     };
     initialize();
     // setIsLoading(false);
-  }, [appointmentsData, usersData, availabilityData]);
+  }, [appointmentData, usersData, availabilityData]);
 
   console.log(appointments);
   console.log(users);

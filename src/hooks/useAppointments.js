@@ -1,11 +1,11 @@
 import { collection, getDocs } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { db } from "../api/firebase-config";
 import useFetch from "./useFetch";
 
-export default function useAppointments() {
-  const { data: usersData } = useFetch("Users", true);
-
+export default function useAppointments(check) {
+  const { data } = useFetch("Users", check);
+  console.log(data);
   const [appointmentData, setAppointmentData] = useState([]);
   const [isloading, setIsloading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -13,25 +13,32 @@ export default function useAppointments() {
   useEffect(() => {
     const fetchData = async () => {
       setIsloading(true);
-      const orderData = [];
-      try {
-        usersData.forEach(async (user) => {
-          const userOrder = collection(db, "Users", `${user.id}`, "OrderData");
-          const order = await getDocs(userOrder);
-          if (order) {
-            orderData.push({
-              user: user,
-              order: order.docs.map((doc) => ({
-                ...doc.data(),
-                id: doc.id,
-              })),
-            });
-          }
-        });
-        console.log(orderData);
-        setAppointmentData(orderData);
 
-        setIsloading(false);
+      const docs = [];
+      try {
+        if (data) {
+          data.forEach(async (user) => {
+            const userOrder = collection(
+              db,
+              "Users",
+              `${user.id}`,
+              "OrderData"
+            );
+
+            const order = await getDocs(userOrder);
+
+            order.docs.forEach((doc) => {
+              docs.push({
+                ...doc.data(),
+                userId: user.id,
+                id: doc.id,
+              });
+            });
+          });
+          console.log(docs);
+          setAppointmentData(docs);
+          setIsloading(false);
+        }
       } catch (error) {
         console.log(error);
         setErrorMessage(error.message);
@@ -40,8 +47,7 @@ export default function useAppointments() {
     };
 
     fetchData();
-  }, [usersData]);
-
+  }, [check, data]);
   console.log(appointmentData);
 
   return { appointmentData, isloading, errorMessage };

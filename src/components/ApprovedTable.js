@@ -1,5 +1,16 @@
-import { collection, doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 import { db } from "../api/firebase-config";
 import { useStateContext } from "../contexts/ContextProvider";
 
@@ -7,37 +18,64 @@ const ApprovedTable = ({ rows }) => {
   const { users, appointments, updateAppointments, updateCheck } =
     useStateContext();
 
+  console.log(appointments);
+
+  const [appointmentData, setAppointmentData] = useState([]);
   const [filterValue, setFilterValue] = useState("");
 
-  const setAppointment = async (userId, approved) => {
-    const appointmentsCollectionRef = collection(db, "appointments");
-    const data = doc(appointmentsCollectionRef, userId);
-    await updateDoc(data, {
-      isApproved: approved,
-    });
-  };
+  const [isloading, setIsloading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const weekday = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsloading(true);
+
+      const docs = [];
+      try {
+        users.forEach(async (user) => {
+          const messageRef = doc(db, "Users", "OrderData");
+          const message = await getDoc(messageRef);
+          console.log(message);
+
+          const userOrder = collection(db, "Users", `${user.id}`, "OrderData");
+
+          const order = await getDocs(userOrder);
+
+          order.docs.forEach((doc) => {
+            docs.push({
+              ...doc.data(),
+              userId: user.id,
+              id: doc.id,
+            });
+          });
+
+          setAppointmentData(docs);
+          setIsloading(false);
+        });
+      } catch (error) {
+        console.log(error);
+        setErrorMessage(error.message);
+        alert(error);
+      }
+    };
+
+    fetchData();
+  }, [users]);
+
+  console.log(appointmentData);
+
   return (
     <div className="container mx-auto px-4 sm:px-8 max-w-3xl">
       <div className="">
-        <div className="flex flex-row mb-1 sm:mb-0 items-center justify-between w-full">
-          <h2 className="text-2xl text-primary font-medium leading-tight">
+        <div className="mb-0 xl:mb-2 sm:flex items-center justify-between w-full">
+          <h2 className="text-2xl sm:text-3xl  text-primary font-semibold leading-tight">
             Approved Appointments
           </h2>
-          <div className="text-end">
-            <form className="relative flex items-center md:flex-row w-3/4 md:w-full max-w-sm md:space-x-3 md:space-y-0 justify-center">
+          <div className="mt-6 sm:mt-0 justify-self-end text-end">
+            <form className="relative flex items-center md:flex-row w-full sm:w-fit md:space-x-3 md:space-y-0 ">
               <input
                 type="text"
-                className="text-white py-2 pl-2 pr-8 bg-transparent border-t-0 border-l-0 border-r-0 border-b-2 outline-none ring-0 focus:border-b-primary-dark focus:border-b-2 focus:ring-0"
+                className="text-white py-3 pl-2 pr-8 bg-transparent w-full sm:w-fit xl:w-full border-t-0 border-l-0 border-r-0 border-b-2 outline-none ring-0 focus:border-b-primary-dark focus:border-b-2 focus:ring-0"
                 placeholder="Search"
                 value={filterValue}
                 onChange={(e) => setFilterValue(e.target.value)}
@@ -73,118 +111,156 @@ const ApprovedTable = ({ rows }) => {
                 <tr className="">
                   <th
                     scope="col"
-                    className="px-5 py-2 text-center border-b-2 border-white border-opacity-50   text-white text-opacity-50 text-lg font-normal"
+                    className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b-2 border-white border-opacity-50   text-white text-opacity-50 text-lg font-normal"
                   >
                     Name
                   </th>
                   <th
                     scope="col"
-                    className="px-5 py-2 text-center border-b-2 border-white border-opacity-50   text-white text-opacity-50 text-lg font-normal"
+                    className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b-2 border-white border-opacity-50   text-white text-opacity-50 text-lg font-normal"
                   >
                     Time
                   </th>
                   <th
                     scope="col"
-                    className="px-5 py-2 text-center border-b-2 border-white border-opacity-50   text-white text-opacity-50 text-lg font-normal"
+                    className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b-2 border-white border-opacity-50   text-white text-opacity-50 text-lg font-normal"
                   >
-                    Day
+                    Date
                   </th>
                   <th
                     scope="col"
-                    className="px-5 py-2 text-center border-b-2 border-white border-opacity-50   text-white text-opacity-50 text-lg font-normal"
+                    className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b-2 border-white border-opacity-50   text-white text-opacity-50 text-lg font-normal"
                   >
-                    Approval Status
+                    Approval
                   </th>
                 </tr>
               </thead>
               <tbody className="overflow-y-auto">
-                {appointments.map((user) => {
-                  let selectedUser = users?.filter(
-                    (usr) => usr?.id === user?.userId
+                {appointments.map((appointment) => {
+                  let selectedUser = users.filter(
+                    (usr) => usr.id === appointment.userId
                   );
-                  console.log(selectedUser);
+                  // console.log(selectedUser);
                   if (filterValue.length > 0) {
-                    selectedUser = selectedUser.filter((selected) =>
-                      selected.username
-                        .toLowerCase()
-                        .includes(filterValue.toLowerCase())
-                    );
+                    selectedUser.forEach((selected) => {
+                      if (
+                        selected.username
+                          .toLowerCase()
+                          .includes(filterValue.toLowerCase())
+                      ) {
+                        selectedUser.push(appointment);
+                      }
+                      console.log(selectedUser);
+                    });
                   }
 
                   return (
                     <>
-                      {user.isApproved === true && selectedUser.length > 0 && (
-                        <tr>
-                          {console.log(user)}
-                          <td className="px-5 py-2 text-center border-b border-white border-opacity-50 text-sm">
-                            <div className=" flex items-center">
-                              <div className="flex-shrink-0">
-                                <div className="block relative">
-                                  {/* <img
-                                    alt="profil"
-                                    src="/images/person/8.jpg"
-                                    className="mx-auto object-cover rounded-full "
-                                  /> */}
-                                  <svg
-                                    width="16"
-                                    height="16"
-                                    viewBox="0 0 16 16"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      d="M8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8ZM8 10C5.33 10 0 11.34 0 14V15C0 15.55 0.45 16 1 16H15C15.55 16 16 15.55 16 15V14C16 11.34 10.67 10 8 10Z"
-                                      fill="white"
-                                    />
-                                  </svg>
+                      {selectedUser.length > 0 &&
+                        appointment.confirmed === true && (
+                          <tr>
+                            <td className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b border-white border-opacity-50 text-sm">
+                              <div className=" flex items-center">
+                                <div className="flex-shrink-0">
+                                  <div className="block relative">
+                                    <svg
+                                      width="16"
+                                      height="16"
+                                      viewBox="0 0 16 16"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        d="M8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8ZM8 10C5.33 10 0 11.34 0 14V15C0 15.55 0.45 16 1 16H15C15.55 16 16 15.55 16 15V14C16 11.34 10.67 10 8 10Z"
+                                        fill="white"
+                                      />
+                                    </svg>
+                                  </div>
+                                </div>
+                                <div className="ml-3">
+                                  <p className="text-white whitespace-no-wrap">
+                                    {selectedUser[0]?.username}
+                                  </p>
                                 </div>
                               </div>
-                              <div className="ml-3">
-                                <p className="text-white whitespace-no-wrap">
-                                  {/* {user.userId} */}
-                                  {selectedUser[0]?.username}
-                                </p>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-5 py-2 text-center border-b border-white border-opacity-50 text-sm">
-                            <p className="text-white whitespace-no-wrap">
-                              {user.appointment.toDate().toLocaleTimeString()}
-                            </p>
-                          </td>
-                          <td className="px-5 py-2 text-center border-b border-white border-opacity-50 text-sm">
-                            <p className="text-white whitespace-no-wrap">
-                              {weekday[user.appointment.toDate().getDay()]}
-                              {/* {new Date(user.appointment).toLocaleTimeString().} */}
-                            </p>
-                          </td>
-                          <td className="px-3 py-2 text-center border-b border-white border-opacity-50 text-sm">
-                            <div className="flex items-center justify-center">
-                              <button
-                                /* onClick={() => {
-                                  setAppointment(user.id, true);
-                                  updateAppointments(user.id, true);
-                                  updateCheck();
-                                }} */
-                                className="mr-6 text-white hover:text-primary"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-6 w-6"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
+                            </td>
+                            <td className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b border-white border-opacity-50 text-sm">
+                              <p className="text-white whitespace-no-wrap">
+                                {appointment?.Time}
+                              </p>
+                            </td>
+                            <td className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b border-white border-opacity-50 text-sm">
+                              <p className="text-white whitespace-no-wrap">
+                                {appointment?.Date}
+                              </p>
+                            </td>
+                            <td className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b border-white border-opacity-50 text-sm">
+                              <div className="flex items-center justify-center">
+                                <button
+                                  onClick={async () => {
+                                    const dataRef = doc(
+                                      db,
+                                      "Users",
+                                      `${selectedUser[0]?.id}`,
+                                      "OrderData",
+                                      `${appointment?.id}`
+                                    );
+
+                                    await updateDoc(dataRef, {
+                                      confirmed: true,
+                                    });
+                                    updateCheck();
+                                  }}
+                                  className="mr-6 text-white hover:text-primary"
                                 >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-6 w-6"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                </button>
+
+                                <button
+                                  onClick={async () => {
+                                    const dataRef = doc(
+                                      db,
+                                      "Users",
+                                      `${selectedUser[0]?.id}`,
+                                      "OrderData",
+                                      `${appointment?.id}`
+                                    );
+                                    await updateDoc(dataRef, {
+                                      confirmed: false,
+                                    });
+                                    // await deleteDoc(dataRef);
+                                    updateCheck();
+                                  }}
+                                  className=" text-white hover:text-red-500"
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-6 w-6"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
                     </>
                   );
                 })}

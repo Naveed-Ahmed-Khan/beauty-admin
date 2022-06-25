@@ -7,15 +7,15 @@ const Users = ({ rows }) => {
   const [filterValue, setFilterValue] = useState("");
   return (
     <div className="mt-[10vh] max-w-screen-lg container mx-auto px-4 sm:px-8">
-      <div className="mb-10 flex flex-row items-center justify-between w-full">
-        <h2 className="text-4xl text-primary font-semibold leading-tight">
+      <div className="mb-10 sm:flex items-center justify-between w-full">
+        <h2 className="text-3xl sm:text-4xl text-primary font-semibold leading-tight">
           Users
         </h2>
-        <div className="text-end">
-          <form className="relative flex items-center md:flex-row w-3/4 md:w-full max-w-sm md:space-x-3 md:space-y-0 justify-center">
+        <div className="mt-6 sm:mt-0 text-end">
+          <form className="relative flex items-center md:flex-row w-full sm:w-fit md:space-x-3 md:space-y-0 ">
             <input
               type="text"
-              className="text-white py-3 pl-2 pr-8 bg-transparent border-t-0 border-l-0 border-r-0 border-b-2 outline-none ring-0 focus:border-b-primary-dark focus:border-b-2 focus:ring-0"
+              className="text-white py-3 pl-2 pr-8 bg-transparent w-full sm:w-fit border-t-0 border-l-0 border-r-0 border-b-2 outline-none ring-0 focus:border-b-primary-dark focus:border-b-2 focus:ring-0"
               placeholder="Search"
               value={filterValue}
               onChange={(e) => setFilterValue(e.target.value)}
@@ -51,19 +51,25 @@ const Users = ({ rows }) => {
               <tr className="">
                 <th
                   scope="col"
-                  className="px-5 py-3   border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-lg  font-normal"
+                  className="px-3 py-3 sm:px-5 sm:py-3 border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-base sm:text-lg  font-normal"
                 >
                   Name
                 </th>
                 <th
                   scope="col"
-                  className="px-5 py-3   border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-lg  font-normal"
+                  className="px-3 py-3 sm:px-5 sm:py-3   border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-base sm:text-lg   font-normal"
                 >
                   Email
                 </th>
                 <th
                   scope="col"
-                  className="px-5 py-3   border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-lg  font-normal"
+                  className="px-3 py-3 sm:px-5 sm:py-3   border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-base sm:text-lg   font-normal"
+                >
+                  Contact
+                </th>
+                <th
+                  scope="col"
+                  className="px-3 py-3 sm:px-5 sm:py-3   border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-base sm:text-lg   font-normal"
                 >
                   Date Joined
                 </th>
@@ -128,6 +134,11 @@ const Users = ({ rows }) => {
                               </p>
                             </div>
                           </div>
+                        </td>
+                        <td className="px-5 py-3  border-b border-white border-opacity-50  text-sm">
+                          <p className="text-white whitespace-no-wrap">
+                            {user[0]?.contact}
+                          </p>
                         </td>
                         <td className="px-5 py-3  border-b border-white border-opacity-50  text-sm">
                           <p className="text-white whitespace-no-wrap">

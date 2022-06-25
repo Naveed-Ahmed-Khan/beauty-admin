@@ -44,7 +44,7 @@ export default function ChatSidebar({
           )}
         </div>
 
-        <div className="relative text-gray-600">
+        {/* <div className="relative text-gray-600">
           <span className="absolute inset-y-0 left-0 flex items-center pl-2">
             <svg
               fill="none"
@@ -65,7 +65,7 @@ export default function ChatSidebar({
             placeholder="Search"
             required
           />
-        </div>
+        </div> */}
       </div>
 
       <ul className="overflow-auto h-[32rem]">

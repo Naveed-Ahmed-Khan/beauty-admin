@@ -33,8 +33,8 @@ const AvailabilityTable = ({ rows }) => {
   return (
     <div className="container mx-auto px-4 sm:px-8 max-w-3xl">
       <div className="">
-        <div className="flex flex-row mb-1 sm:mb-0 items-center justify-between w-full">
-          <h2 className="mb-1 text-2xl text-primary font-medium leading-tight">
+        <div className="flex flex-row mb-0 xl:mb-4 items-center justify-between w-full">
+          <h2 className="text-2xl sm:text-3xl text-primary font-semibold leading-tight">
             Availability
           </h2>
           {/* <div className="text-end">
@@ -62,19 +62,19 @@ const AvailabilityTable = ({ rows }) => {
                 <tr className="">
                   <th
                     scope="col"
-                    className="px-5 py-3  border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-sm uppercase font-normal"
+                    className="px-3 py-3 sm:px-5 sm:py-3  border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-sm uppercase font-normal"
                   >
                     Day
                   </th>
                   <th
                     scope="col"
-                    className="px-5 py-3  border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-sm uppercase font-normal"
+                    className="px-3 py-3 sm:px-5 sm:py-3  border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-sm uppercase font-normal"
                   >
                     Booking Availability
                   </th>
                   <th
                     scope="col"
-                    className="px-5 py-3  border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-sm uppercase font-normal"
+                    className="px-3 py-3 sm:px-5 sm:py-3  border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-sm uppercase font-normal"
                   >
                     <div className="flex items-center justify-evenly">
                       <p className="">Actions</p>

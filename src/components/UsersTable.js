@@ -8,15 +8,15 @@ const UsersTable = ({ rows }) => {
   return (
     <div className="container mx-auto px-4 sm:px-8 max-w-3xl">
       <div className="">
-        <div className="flex flex-row mb-1 sm:mb-0 items-center justify-between w-full">
-          <h2 className="text-2xl text-primary font-medium leading-tight">
-            All Users
+        <div className="mb-0 xl:mb-2 sm:flex items-center justify-between w-full">
+          <h2 className="text-2xl sm:text-3xl text-primary font-semibold leading-tight">
+            Users
           </h2>
-          <div className="text-end">
-            <form className="relative flex items-center md:flex-row w-3/4 md:w-full max-w-sm md:space-x-3 md:space-y-0 justify-center">
+          <div className="mt-6 sm:mt-0 text-end">
+            <form className="relative flex items-center md:flex-row w-full sm:w-fit md:space-x-3 md:space-y-0 ">
               <input
                 type="text"
-                className="text-white py-3 pl-2 pr-8 bg-transparent border-t-0 border-l-0 border-r-0 border-b-2 outline-none ring-0 focus:border-b-primary-dark focus:border-b-2 focus:ring-0"
+                className="text-white py-3 pl-2 pr-8 bg-transparent w-full sm:w-fit border-t-0 border-l-0 border-r-0 border-b-2 outline-none ring-0 focus:border-b-primary-dark focus:border-b-2 focus:ring-0"
                 placeholder="Search"
                 value={filterValue}
                 onChange={(e) => setFilterValue(e.target.value)}
@@ -52,32 +52,22 @@ const UsersTable = ({ rows }) => {
                 <tr className="">
                   <th
                     scope="col"
-                    className="px-5 py-3   border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-lg  font-normal"
+                    className="px-3 py-3 sm:px-5 sm:py-3 border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-base sm:text-lg  font-normal"
                   >
                     Name
                   </th>
                   <th
                     scope="col"
-                    className="px-5 py-3   border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-lg  font-normal"
+                    className="px-3 py-3 sm:px-5 sm:py-3 border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-base sm:text-lg  font-normal"
                   >
                     Email
                   </th>
                   <th
                     scope="col"
-                    className="px-5 py-3   border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-lg  font-normal"
+                    className="px-3 py-3 sm:px-5 sm:py-3 border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-base sm:text-lg  font-normal"
                   >
                     Date Joined
                   </th>
-                  {/* <th
-                    scope="col"
-                    className="px-5 py-3 py-3   border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-sm uppercase font-normal"
-                  >
-                    status
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-5 py-3 py-3   border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-sm uppercase font-normal"
-                  ></th> */}
                 </tr>
               </thead>
               <tbody className="overflow-y-auto">
@@ -100,7 +90,7 @@ const UsersTable = ({ rows }) => {
                     <>
                       {user.length > 0 && (
                         <tr key={user.id}>
-                          <td className="px-5 py-3  border-b border-white border-opacity-50  text-sm">
+                          <td className="px-3 py-3 sm:px-5 sm:py-3  border-b border-white border-opacity-50  text-sm">
                             <div className="flex items-center">
                               <div className="flex-shrink-0">
                                 <div className="block relative">
@@ -130,22 +120,16 @@ const UsersTable = ({ rows }) => {
                               </div>
                             </div>
                           </td>
-                          <td className="px-5 py-3  border-b border-white border-opacity-50  text-sm">
+                          <td className="px-3 py-3 sm:px-5 sm:py-3  border-b border-white border-opacity-50  text-sm">
                             <p className="text-white whitespace-no-wrap">
                               {user[0]?.email}
                             </p>
                           </td>
-                          <td className="px-5 py-3  border-b border-white border-opacity-50  text-sm">
+                          <td className="px-3 py-3 sm:px-5 sm:py-3  border-b border-white border-opacity-50  text-sm">
                             <p className="text-white whitespace-no-wrap">
                               12/09/2020
                             </p>
                           </td>
-
-                          {/* <td className="px-5 py-3  border-b border-white border-opacity-50  text-sm">
-                    <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                      Edit
-                    </a>
-                  </td> */}
                         </tr>
                       )}
                     </>
