@@ -70,7 +70,8 @@ const AvailabilityTable = ({ rows }) => {
                     scope="col"
                     className="px-3 py-3 sm:px-5 sm:py-3  border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-sm uppercase font-normal"
                   >
-                    Booking Availability
+                    <p className="hidden sm:block">Booking Availability</p>
+                    <p className="block sm:hidden">Availability</p>
                   </th>
                   <th
                     scope="col"
@@ -96,7 +97,7 @@ const AvailabilityTable = ({ rows }) => {
                           </div>
                         </div>
                       </td>
-                      <td className="px-5 py-2  border-b border-white border-opacity-50 text-sm">
+                      <td className="px-3 sm:px-5 py-2  border-b border-white border-opacity-50 text-sm">
                         {selected === user.id ? (
                           <div className="flex justify-evenly gap-2">
                             <div className="flex mr-1">
@@ -143,13 +144,13 @@ const AvailabilityTable = ({ rows }) => {
                             </div>
                           </div>
                         ) : (
-                          <p className="flex gap-4 text-white whitespace-no-wrap">
+                          <p className="flex gap-1 text-white whitespace-no-wrap">
                             <div>{user.bookingStart}</div>-
                             <div>{user.bookingEnd}</div>
                           </p>
                         )}
                       </td>
-                      <td className="px-5 py-2 border-b border-white border-opacity-50 text-sm">
+                      <td className="px-1 sm:px-5 py-2 border-b border-white border-opacity-50 text-sm">
                         <div className="flex items-center justify-evenly">
                           {selected === user.id ? (
                             <div className="flex items-center justify-evenly">
@@ -210,7 +211,7 @@ const AvailabilityTable = ({ rows }) => {
                                     // setEditTime(true);
                                   }}
                                   disabled
-                                  className="text-gray-700 bg-white rounded-lg px-4 py-1 disabled:opacity-50"
+                                  className="text-gray-700 bg-white rounded-lg px-2 sm:px-4 py-1 disabled:opacity-50"
                                 >
                                   Set Time
                                 </button>
@@ -222,7 +223,7 @@ const AvailabilityTable = ({ rows }) => {
 
                                     // setEditTime(true);
                                   }}
-                                  className="text-gray-700 bg-white rounded-lg px-4 py-1"
+                                  className="text-gray-700 bg-white rounded-lg px-2 sm:px-4 py-1"
                                 >
                                   Set Time
                                 </button>
@@ -237,7 +238,7 @@ const AvailabilityTable = ({ rows }) => {
                                 updateOffday(user.id, false);
                                 updateCheck();
                               }}
-                              className="text-gray-700 bg-white opacity-60 hover:bg-primary active:bg-primary rounded-lg px-4 py-1"
+                              className="text-gray-700 bg-white opacity-60 hover:bg-primary active:bg-primary rounded-lg px-2 sm:px-4 py-1"
                             >
                               Off Day
                             </button>
@@ -249,7 +250,7 @@ const AvailabilityTable = ({ rows }) => {
                                 updateOffday(user.id, true);
                                 updateCheck();
                               }}
-                              className="text-gray-700 bg-white hover:bg-primary active:bg-primary rounded-lg px-4 py-1"
+                              className="text-gray-700 bg-white hover:bg-primary active:bg-primary rounded-lg px-2 sm:px-4 py-1"
                             >
                               Work Day
                             </button>
