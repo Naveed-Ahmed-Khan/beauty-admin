@@ -4,7 +4,12 @@ import TimePicker from "react-time-picker";
 import { db } from "../api/firebase-config";
 import { useStateContext } from "../contexts/ContextProvider";
 
-const AvailabilityTable = ({ rows }) => {
+const AvailabilityTable = ({
+  selectedSlot,
+  setSelectedSlot,
+  isEditing,
+  setIsEditing,
+}) => {
   const { availability, updateAvailability, updateOffday, updateCheck } =
     useStateContext();
   const [selected, setSelected] = useState("");
@@ -77,9 +82,9 @@ const AvailabilityTable = ({ rows }) => {
                     scope="col"
                     className="px-3 py-3 sm:px-5 sm:py-3  border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-sm uppercase font-normal"
                   >
-                    <div className="flex items-center justify-evenly">
-                      <p className="">Actions</p>
-                      <p className="">Status</p>
+                    <div className="flex items-center justify-center sm:justify-evenly">
+                      <p className="block sm:hidden">Actions</p>
+                      <p className="hidden sm:block">Status</p>
                     </div>
                   </th>
                 </tr>
@@ -145,13 +150,23 @@ const AvailabilityTable = ({ rows }) => {
                           </div>
                         ) : (
                           <p className="flex gap-1 text-white whitespace-no-wrap">
-                            <div>{user.bookingStart}</div>-
-                            <div>{user.bookingEnd}</div>
+                            <select class="w-full rounded border appearance-none bg-transparent border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-dark focus:border-dark text-base pl-3 pr-10 caret-black">
+                              {user?.slots?.map((slot) => {
+                                return (
+                                  <option className="sm:flex text-dark hover:text-dark">
+                                    <div>{slot.bookingStart}</div>-
+                                    <div>{slot.bookingEnd}</div>
+                                  </option>
+                                );
+                              })}
+                            </select>
+                            {/*    <div>{user.bookingStart}</div>-
+                            <div>{user.bookingEnd}</div> */}
                           </p>
                         )}
                       </td>
                       <td className="px-1 sm:px-5 py-2 border-b border-white border-opacity-50 text-sm">
-                        <div className="flex items-center justify-evenly">
+                        <div className="flex flex-col sm:flex-row gap-3 items-center justify-evenly">
                           {selected === user.id ? (
                             <div className="flex items-center justify-evenly">
                               <button
@@ -205,25 +220,29 @@ const AvailabilityTable = ({ rows }) => {
                               {user.isOffday ? (
                                 <button
                                   onClick={() => {
-                                    setSelected(user.id);
+                                    // setSelected(user.id);
+                                    setSelectedSlot(user);
+                                    setIsEditing(true);
                                     console.log(selected);
 
                                     // setEditTime(true);
                                   }}
                                   disabled
-                                  className="text-gray-700 bg-white rounded-lg px-2 sm:px-4 py-1 disabled:opacity-50"
+                                  className="text-gray-700  bg-primary rounded-lg px-2 sm:px-4 py-1 disabled:opacity-50"
                                 >
                                   Set Time
                                 </button>
                               ) : (
                                 <button
                                   onClick={() => {
-                                    setSelected(user.id);
+                                    // setSelected(user.id);
+                                    setSelectedSlot(user);
+                                    setIsEditing(true);
                                     console.log(selected);
 
                                     // setEditTime(true);
                                   }}
-                                  className="text-gray-700 bg-white rounded-lg px-2 sm:px-4 py-1"
+                                  className="text-gray-700  bg-primary rounded-lg px-2 sm:px-4 py-1"
                                 >
                                   Set Time
                                 </button>
@@ -238,7 +257,7 @@ const AvailabilityTable = ({ rows }) => {
                                 updateOffday(user.id, false);
                                 updateCheck();
                               }}
-                              className="text-gray-700 bg-white opacity-60 hover:bg-primary active:bg-primary rounded-lg px-2 sm:px-4 py-1"
+                              className="text-gray-700  bg-primary opacity-60 hover:bg-primary active:bg-primary rounded-lg px-2 sm:px-4 py-1"
                             >
                               Off Day
                             </button>
@@ -250,7 +269,7 @@ const AvailabilityTable = ({ rows }) => {
                                 updateOffday(user.id, true);
                                 updateCheck();
                               }}
-                              className="text-gray-700 bg-white hover:bg-primary active:bg-primary rounded-lg px-2 sm:px-4 py-1"
+                              className="min-w-max text-gray-700  bg-primary hover:bg-primary active:bg-primary rounded-lg px-2 sm:px-4 py-1"
                             >
                               Work Day
                             </button>

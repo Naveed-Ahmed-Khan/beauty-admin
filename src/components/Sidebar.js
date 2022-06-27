@@ -144,7 +144,7 @@ const Sidebar = (props) => {
                   </Link>
                 </li>
                 <li className="my-12 text-center">
-                  <Link
+                  {/* <Link
                     onClick={() => {
                       props.setOpen(false);
                       props.setShowBackdrop(false);
@@ -173,7 +173,7 @@ const Sidebar = (props) => {
                         />
                       </svg>
                     </span>
-                  </Link>
+                  </Link> */}
                 </li>
               </ul>
             </div>

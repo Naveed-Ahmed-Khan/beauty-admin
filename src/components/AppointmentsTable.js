@@ -216,7 +216,7 @@ const AppointmentsTable = ({ rows }) => {
                                     });
                                     updateCheck();
                                   }}
-                                  className="mr-6 text-white hover:text-primary"
+                                  className="mr-6 text-primary hover:text-primary-dark"
                                 >
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -247,7 +247,7 @@ const AppointmentsTable = ({ rows }) => {
                                     await deleteDoc(dataRef);
                                     updateCheck();
                                   }}
-                                  className=" text-white hover:text-red-500"
+                                  className=" text-primary hover:text-red-500"
                                 >
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"

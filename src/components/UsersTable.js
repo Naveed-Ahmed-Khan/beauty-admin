@@ -45,9 +45,9 @@ const UsersTable = ({ rows }) => {
             </form>
           </div>
         </div>
-        <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-          <div className="bg-secondary bg-opacity-20 h-[21rem] inline-block min-w-full shadow rounded-3xl overflow-auto scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
-            <table className="min-w-full leading-normal rounded-3xl">
+        <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-auto">
+          <div className="bg-secondary bg-opacity-20 h-[21rem] min-w-80 w-full inline-block shadow rounded-3xl overflow-auto scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+            <table className="min-w-80 w-full leading-normal rounded-3xl">
               <thead className="">
                 <tr className="">
                   <th

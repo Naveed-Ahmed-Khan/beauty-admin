@@ -68,7 +68,7 @@ const ApprovedTable = ({ rows }) => {
     <div className="container mx-auto px-4 sm:px-8 max-w-3xl">
       <div className="">
         <div className="mb-0 xl:mb-2 sm:flex items-center justify-between w-full">
-          <h2 className="text-2xl sm:text-3xl  text-primary font-semibold leading-tight">
+          <h2 className="text-2xl sm:text-3xl text-primary font-semibold leading-tight">
             Approved Appointments
           </h2>
           <div className="mt-6 sm:mt-0 justify-self-end text-end">
@@ -197,7 +197,7 @@ const ApprovedTable = ({ rows }) => {
                             <td className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b border-white border-opacity-50 text-sm">
                               <div className="flex items-center justify-center">
                                 <button
-                                  onClick={async () => {
+                                  /* onClick={async () => {
                                     const dataRef = doc(
                                       db,
                                       "Users",
@@ -210,8 +210,8 @@ const ApprovedTable = ({ rows }) => {
                                       confirmed: true,
                                     });
                                     updateCheck();
-                                  }}
-                                  className="mr-6 text-white hover:text-primary"
+                                  }} */
+                                  className=" text-primary hover:text-primary-dark"
                                 >
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -227,7 +227,7 @@ const ApprovedTable = ({ rows }) => {
                                   </svg>
                                 </button>
 
-                                <button
+                                {/* <button
                                   onClick={async () => {
                                     const dataRef = doc(
                                       db,
@@ -242,7 +242,7 @@ const ApprovedTable = ({ rows }) => {
                                     // await deleteDoc(dataRef);
                                     updateCheck();
                                   }}
-                                  className=" text-white hover:text-red-500"
+                                  className=" text-primary hover:text-red-500"
                                 >
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -256,7 +256,7 @@ const ApprovedTable = ({ rows }) => {
                                       clipRule="evenodd"
                                     />
                                   </svg>
-                                </button>
+                                </button> */}
                               </div>
                             </td>
                           </tr>

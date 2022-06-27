@@ -1,7 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useLocation } from "react-router-dom";
+import { db } from "../../api/firebase-config";
 import { useStateContext } from "../../contexts/ContextProvider";
+import useFetch from "../../hooks/useFetch";
 
 export default function ChatSidebar({
   selectedUser,
@@ -11,6 +15,39 @@ export default function ChatSidebar({
 }) {
   const location = useLocation();
   const { users } = useStateContext();
+  const [data, setData] = useState([]);
+
+  const q = query(
+    collection(db, "messages"),
+    where("recieverId", "==", "admin"),
+    where("isRead", "==", false)
+  );
+  const [msgs] = useCollectionData(q, { idField: "chatId" });
+  console.log(msgs);
+
+  useEffect(() => {
+    const msgData = [];
+
+    const fetchData = async () => {
+      try {
+        const q = query(
+          collection(db, "messages"),
+          where("recieverId", "==", "admin"),
+          where("isRead", "==", false)
+        );
+        const fetchedData = await getDocs(q);
+        fetchedData.forEach((doc) => {
+          msgData.push({ ...doc.data(), id: doc.id });
+        });
+        setData(msgData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, [msgs]);
+  console.log(data);
 
   return (
     <div className="border-r border-zinc-700 w-full">
@@ -71,9 +108,10 @@ export default function ChatSidebar({
       <ul className="overflow-auto h-[32rem]">
         <li>
           {users.map((user) => {
+            const count = data.filter((doc) => doc.senderId === user.id);
             return (
               <a
-                onClick={() => {
+                onClick={async () => {
                   setSelectedUser(user);
                   setOpenChat(true);
                 }}
@@ -91,18 +129,19 @@ export default function ChatSidebar({
                   <div className="object-cover bg w-10 h-10 rounded-full" />
                 )}
 
-                <div className="w-full pb-2">
+                <div className="w-full">
                   <div className="flex justify-between">
-                    <span className="block ml-2 font-semibold text-white">
+                    <div className="ml-2 font-semibold text-white">
                       {user.username}
-                    </span>
-                    {/* <span className="block ml-2 text-sm text-gray-600">
-                          25 minutes
-                        </span> */}
+                    </div>
+                    {count.length > 0 ? (
+                      <div className="h-6 w-6 grid place-content-center font-medium rounded-full bg-red-500 ml-2 text-base text-white">
+                        <p className="pr-px">{count?.length}</p>
+                      </div>
+                    ) : (
+                      <div className="w-6 h-6"></div>
+                    )}
                   </div>
-                  {/* <span className="block ml-2 text-sm text-gray-600">
-                        bye
-                      </span> */}
                 </div>
               </a>
             );

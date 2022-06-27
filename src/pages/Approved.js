@@ -229,16 +229,16 @@ const Approved = ({ rows }) => {
                                 />
                               </svg>
                             </button>
-                            <button
-                              /* onClick={() => {
+                            {/* <button
+                              onClick={() => {
                                   setAppointment(user.id, true);
                                   updateAppointments(user.id, true);
                                   updateCheck();
-                                }} */
+                                }}
                               className="mr-6 px-2 py-1 rounded border border-red-600 text-white hover:bg-red-600 transition-all duration-300"
                             >
                               dismiss
-                            </button>
+                            </button> */}
                           </div>
                         </td>
                       </tr>

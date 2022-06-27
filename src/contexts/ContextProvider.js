@@ -1,4 +1,7 @@
+import { collection, query, where } from "firebase/firestore";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { db } from "../api/firebase-config";
 import useAppointments from "../hooks/useAppointments";
 import useFetch from "../hooks/useFetch";
 
@@ -10,12 +13,25 @@ export const ContextProvider = ({ children }) => {
   const [availability, setAvailability] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [currentUser, setCurrentUser] = useState([]);
+  const [unReadMessages, setUnReadMessages] = useState(0);
 
   const { data: usersData } = useFetch("Users", check);
   const { data: availabilityData } = useFetch("weekstatus", check);
   const { appointmentData } = useAppointments(check);
 
+  const q2 = query(
+    collection(db, "messages"),
+    where("recieverId", "==", "admin"),
+    where("isRead", "==", false)
+  );
+
+  const [unRead] = useCollectionData(q2, { idField: "id" });
+
   console.log(appointmentData);
+
+  const updateUnReadMessages = (unRead) => {
+    setUnReadMessages(unRead);
+  };
 
   const updateCheck = () => {
     setCheck(!check);
@@ -24,9 +40,11 @@ export const ContextProvider = ({ children }) => {
   const updateUsers = (data) => {
     setUsers(data);
   };
-  const updateCurrentUser = (data) => {
+
+  /*   const updateCurrentUser = (data) => {
     setCurrentUser(data);
-  };
+  }; */
+
   const updateAppointments = (id, approved) => {
     console.log(id + " " + approved);
     appointments.forEach((appointment) => {
@@ -63,6 +81,10 @@ export const ContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    updateUnReadMessages(unRead?.length);
+  }, [unRead]);
+
+  useEffect(() => {
     const initialize = () => {
       setUsers(usersData);
       setAppointments(appointmentData);
@@ -81,12 +103,14 @@ export const ContextProvider = ({ children }) => {
         users,
         appointments,
         availability,
+        unReadMessages,
         setCurrentUser,
         updateCheck,
         updateAppointments,
         updateAvailability,
         updateOffday,
         updateUsers,
+        updateUnReadMessages,
       }}
     >
       {children}

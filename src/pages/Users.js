@@ -59,13 +59,13 @@ const Users = ({ rows }) => {
                   scope="col"
                   className="px-3 py-3 sm:px-5 sm:py-3   border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-base sm:text-lg   font-normal"
                 >
-                  Email
+                  Contact
                 </th>
                 <th
                   scope="col"
                   className="px-3 py-3 sm:px-5 sm:py-3   border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-base sm:text-lg   font-normal"
                 >
-                  Contact
+                  Email
                 </th>
                 <th
                   scope="col"

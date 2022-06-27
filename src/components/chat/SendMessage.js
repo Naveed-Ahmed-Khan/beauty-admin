@@ -1,14 +1,20 @@
 import {
   addDoc,
   collection,
+  doc,
+  getDocs,
   limit,
   orderBy,
   query,
   serverTimestamp,
+  updateDoc,
   where,
 } from "firebase/firestore";
-import React, { useState } from "react";
-import { useCollectionData } from "react-firebase-hooks/firestore";
+import React, { useEffect, useState } from "react";
+import {
+  useCollection,
+  useCollectionData,
+} from "react-firebase-hooks/firestore";
 import { db } from "../../api/firebase-config";
 import { useLocation } from "react-router-dom";
 
@@ -17,8 +23,46 @@ import { useLocation } from "react-router-dom";
 
 function SendMessage({ setIsChatOpen, selectedUser, setOpenChat }) {
   const location = useLocation();
-  // const [selectedUser, setSelectedUser] = useState([]);
   const [enteredText, setEnteredText] = useState([]);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const msgData = [];
+
+    const fetchData = async () => {
+      try {
+        const q = query(
+          collection(db, "messages"),
+          where("senderId", "==", selectedUser?.id || ""),
+          where("isRead", "==", false)
+        );
+        const fetchedData = await getDocs(q);
+        fetchedData.forEach((doc) => {
+          msgData.push({ ...doc.data(), id: doc.id });
+        });
+        setData(msgData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, [selectedUser]);
+  console.log(data);
+
+  useEffect(() => {
+    const updateData = async () => {
+      const collectionRef = collection(db, "messages");
+      try {
+        data.forEach((item) => {
+          updateDoc(doc(collectionRef, item.id), { isRead: true });
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    updateData();
+  }, [data]);
 
   const q = query(
     collection(db, "messages"),
@@ -26,7 +70,8 @@ function SendMessage({ setIsChatOpen, selectedUser, setOpenChat }) {
     orderBy("createdAt"),
     limit(50)
   );
-  const [messages] = useCollectionData(q, { idField: "id" });
+  const [messages] = useCollectionData(q, { idField: "chatId" });
+  console.log(messages);
 
   async function sendMessage(e) {
     e.preventDefault();
