@@ -18,7 +18,7 @@ const ApprovedTable = ({ rows }) => {
   const { users, appointments, updateAppointments, updateCheck } =
     useStateContext();
 
-  console.log(appointments);
+  // console.log(appointments);
 
   const [appointmentData, setAppointmentData] = useState([]);
   const [filterValue, setFilterValue] = useState("");
@@ -35,7 +35,7 @@ const ApprovedTable = ({ rows }) => {
         users.forEach(async (user) => {
           const messageRef = doc(db, "Users", "OrderData");
           const message = await getDoc(messageRef);
-          console.log(message);
+          // console.log(message);
 
           const userOrder = collection(db, "Users", `${user.id}`, "OrderData");
 
@@ -62,7 +62,7 @@ const ApprovedTable = ({ rows }) => {
     fetchData();
   }, [users]);
 
-  console.log(appointmentData);
+  // console.log(appointmentData);
 
   return (
     <div className="container mx-auto px-4 sm:px-8 max-w-3xl">
@@ -191,7 +191,7 @@ const ApprovedTable = ({ rows }) => {
                             </td>
                             <td className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b border-white border-opacity-50 text-sm">
                               <p className="text-white whitespace-no-wrap">
-                                {appointment?.Date}
+                                {/* {appointment?.Date} */}
                               </p>
                             </td>
                             <td className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b border-white border-opacity-50 text-sm">

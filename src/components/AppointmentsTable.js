@@ -4,10 +4,7 @@ import {
   doc,
   getDoc,
   getDocs,
-  limit,
-  query,
   updateDoc,
-  where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -15,7 +12,7 @@ import { db } from "../api/firebase-config";
 import { useStateContext } from "../contexts/ContextProvider";
 
 const AppointmentsTable = ({ rows }) => {
-  const { users, appointments, updateAppointments, updateCheck } =
+  const { users, appointments, confirmAppointment, updateCheck } =
     useStateContext();
 
   console.log(appointments);
@@ -35,10 +32,8 @@ const AppointmentsTable = ({ rows }) => {
         users.forEach(async (user) => {
           const messageRef = doc(db, "Users", "OrderData");
           const message = await getDoc(messageRef);
-          console.log(message);
-
+          // console.log(message);
           const userOrder = collection(db, "Users", `${user.id}`, "OrderData");
-
           const order = await getDocs(userOrder);
 
           order.docs.forEach((doc) => {
@@ -196,7 +191,7 @@ const AppointmentsTable = ({ rows }) => {
                             </td>
                             <td className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b border-white border-opacity-50 text-sm">
                               <p className="text-white whitespace-no-wrap">
-                                {appointment?.Date}
+                                {/* {appointment?.Date} */}
                               </p>
                             </td>
                             <td className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b border-white border-opacity-50 text-sm">
@@ -214,6 +209,8 @@ const AppointmentsTable = ({ rows }) => {
                                     await updateDoc(dataRef, {
                                       confirmed: true,
                                     });
+                                    confirmAppointment(appointment);
+                                    // console.log(appointment);
                                     updateCheck();
                                   }}
                                   className="mr-6 text-primary hover:text-primary-dark"

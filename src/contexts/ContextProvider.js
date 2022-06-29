@@ -1,4 +1,4 @@
-import { collection, query, where } from "firebase/firestore";
+import { collection, doc, query, updateDoc, where } from "firebase/firestore";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { db } from "../api/firebase-config";
@@ -40,10 +40,6 @@ export const ContextProvider = ({ children }) => {
   const updateUsers = (data) => {
     setUsers(data);
   };
-
-  /*   const updateCurrentUser = (data) => {
-    setCurrentUser(data);
-  }; */
 
   const updateAppointments = (id, approved) => {
     console.log(id + " " + approved);
@@ -94,6 +90,33 @@ export const ContextProvider = ({ children }) => {
     // setIsLoading(false);
   }, [appointmentData, usersData, availabilityData]);
 
+  const confirmAppointment = (selectedAppointment) => {
+    console.log(selectedAppointment);
+    availability.forEach((avail) => {
+      // console.log(selectedAppointment.Date.toDate().toDateString());
+      if (
+        selectedAppointment.Date.toDate().toDateString() ===
+        avail.date.toDate().toDateString()
+      ) {
+        console.log(avail.date.toDate().toDateString());
+        avail.slots.forEach(async (slot) => {
+          let filteredSlots = [];
+          if (selectedAppointment.slotId === slot.id) {
+            console.log(avail.slots);
+            console.log(selectedAppointment.slotId);
+            filteredSlots = avail?.slots?.filter(
+              (slot) => selectedAppointment.slotId !== slot.id
+            );
+            console.log(filteredSlots);
+            await updateDoc(doc(collection(db, "weekstatus"), avail.id), {
+              slots: filteredSlots,
+            });
+          }
+        });
+      }
+    });
+  };
+
   console.log(appointments);
   console.log(users);
   return (
@@ -111,6 +134,7 @@ export const ContextProvider = ({ children }) => {
         updateOffday,
         updateUsers,
         updateUnReadMessages,
+        confirmAppointment,
       }}
     >
       {children}
