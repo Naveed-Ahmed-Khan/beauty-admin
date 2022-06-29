@@ -1,17 +1,22 @@
 import { collection, doc, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
+import ReactDatePicker from "react-datepicker";
 import TimePicker from "react-time-picker";
 import { db } from "../api/firebase-config";
 import { useStateContext } from "../contexts/ContextProvider";
+import Button from "./UI/Button";
+import DatePicker from "./UI/DatePicker";
 
 const AvailabilityTable = ({
   selectedSlot,
   setSelectedSlot,
   isEditing,
   setIsEditing,
+  setIsAdding,
 }) => {
   const { availability, updateAvailability, updateOffday, updateCheck } =
     useStateContext();
+  const [startDate, setStartDate] = useState(new Date());
   const [selected, setSelected] = useState("");
   const [isOffday, setIsOffday] = useState(false);
   const [startTime, setStartTime] = useState("12:30");
@@ -42,6 +47,15 @@ const AvailabilityTable = ({
           <h2 className="text-2xl sm:text-3xl text-primary font-semibold leading-tight">
             Availability
           </h2>
+          <div className="text-sm -mt-4">
+            <Button
+              onClick={() => {
+                setIsAdding(true);
+              }}
+            >
+              Add Slot
+            </Button>
+          </div>
           {/* <div className="text-end">
             <form className="flex flex-col md:flex-row w-3/4 md:w-full max-w-sm md:space-x-3 md:space-y-0 justify-center">
               <input
@@ -61,7 +75,7 @@ const AvailabilityTable = ({
           </div> */}
         </div>
         <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-          <div className="bg-secondary bg-opacity-20 h-[21rem] inline-block min-w-full shadow rounded-3xl overflow-auto scrollbar-thin scrollbar-thumb-gray-400  scrollbar-track-black">
+          <div className="bg-secondary bg-opacity-20 h-[21rem] inline-block min-w-full shadow rounded-3xl overflow-auto scrollbar-thin scrollbar-thumb-zinc-700  scrollbar-track-black">
             <table className="min-w-full leading-normal">
               <thead className="">
                 <tr className="">
@@ -69,7 +83,7 @@ const AvailabilityTable = ({
                     scope="col"
                     className="px-3 py-3 sm:px-5 sm:py-3  border-b-2 border-white border-opacity-50  text-white text-opacity-50  text-left text-sm uppercase font-normal"
                   >
-                    Day
+                    Date
                   </th>
                   <th
                     scope="col"
@@ -90,14 +104,17 @@ const AvailabilityTable = ({
                 </tr>
               </thead>
               <tbody className=" overflow-y-auto">
+                <div className="w-20"></div>
                 {availability.map((user) => {
+                  const currentDate =
+                    user?.date?.toDate()?.toLocaleDateString() || "";
                   return (
                     <tr key={user.id}>
                       <td className="px-5 py-2 border-b border-white border-opacity-50 text-sm">
                         <div className="flex items-center">
                           <div className="">
-                            <p className="text-white whitespace-no-wrap">
-                              {user.day}
+                            <p className="text-white whitespace-no-wrap w-full">
+                              {currentDate}
                             </p>
                           </div>
                         </div>
@@ -154,8 +171,13 @@ const AvailabilityTable = ({
                               {user?.slots?.map((slot) => {
                                 return (
                                   <option className="sm:flex text-dark hover:text-dark">
-                                    <div>{slot.bookingStart}</div>-
-                                    <div>{slot.bookingEnd}</div>
+                                    <div className="text-sm">
+                                      {slot.bookingStart}
+                                    </div>
+                                    -
+                                    <div className="text-sm">
+                                      {slot.bookingEnd}
+                                    </div>
                                   </option>
                                 );
                               })}

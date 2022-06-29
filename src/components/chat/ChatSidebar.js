@@ -2,7 +2,7 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { db } from "../../api/firebase-config";
 import { useStateContext } from "../../contexts/ContextProvider";
 import useFetch from "../../hooks/useFetch";
@@ -13,6 +13,7 @@ export default function ChatSidebar({
   setIsChatOpen,
   setOpenChat,
 }) {
+  const navigate = useNavigate();
   const location = useLocation();
   const { users } = useStateContext();
   const [data, setData] = useState([]);
@@ -56,29 +57,31 @@ export default function ChatSidebar({
           <h2 className="my-2 mb-2 ml-2 text-xl font-medium text-white">
             Chats
           </h2>
-          {location.pathname !== "/chat" && (
-            <button
-              className="block lg:hidden"
-              onClick={() => {
+          <button
+            className="block lg:hidden"
+            onClick={() => {
+              if (location.pathname === "/chat") {
+                navigate(-1);
+              } else {
                 setIsChatOpen(false);
-              }}
+              }
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 text-white hover:text-primary hover:rotate-90 hover:scale-125 transition-all duration-300 ease-out"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-white hover:text-primary hover:rotate-90 hover:scale-125 transition-all duration-300 ease-out"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          )}
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
         </div>
 
         {/* <div className="relative text-gray-600">

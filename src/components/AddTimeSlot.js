@@ -1,18 +1,13 @@
-import { collection, doc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import TimePicker from "react-time-picker";
 import { db } from "../api/firebase-config";
 import { useStateContext } from "../contexts/ContextProvider";
 import DatePicker from "./UI/DatePicker";
 
-export default function EditTimeSlot({
-  selectedSlot,
-  setSelectedSlot,
-  isEditing,
-  setIsEditing,
-}) {
+export default function AddTimeSlot({ setIsAdding }) {
   const { updateCheck } = useStateContext();
-  const [date, setDate] = useState(selectedSlot.date || new Date());
+  const [date, setDate] = useState(new Date());
   const [allSlots, setAllSlots] = useState([]);
   const [editTime, setEditTime] = useState(false);
   const [addSlot, setAddSlot] = useState(false);
@@ -22,24 +17,8 @@ export default function EditTimeSlot({
   const [endTime, setEndTime] = useState("12:30");
   const [endZone, setEndZone] = useState("PM");
 
-  /*   const setAvailability = async (userId, start, end) => {
-    await updateDoc(doc(appointmentsCollectionRef, userId), {
-      bookingStart: start,
-      bookingEnd: end,
-    });
-  }; */
-
   console.log(startTime, startZone);
   console.log(endTime, endZone);
-
-  useEffect(() => {
-    if (selectedSlot.slots.length > 0) {
-      setAllSlots(selectedSlot.slots);
-    } else {
-      setAllSlots([]);
-    }
-  }, [selectedSlot]);
-  console.log(allSlots);
 
   return (
     <div className="container mx-auto px-4 sm:px-8 max-w-3xl">
@@ -83,15 +62,14 @@ export default function EditTimeSlot({
                         date !== null &&
                         allSlots.length > 0
                       ) {
-                        await updateDoc(
-                          doc(appointmentsCollectionRef, selectedSlot.id),
-                          {
-                            slots: allSlots,
-                            date: date,
-                          }
-                        );
+                        await addDoc(appointmentsCollectionRef, {
+                          slots: allSlots,
+                          date: date,
+                          isOffday: false,
+                        });
+
                         updateCheck();
-                        setIsEditing(false);
+                        setIsAdding(false);
                       }
                     }}
                     className="text-base border-2 border-primary px-2 sm:px-4 py-1 rounded-md bg-primary text-dark"
@@ -100,7 +78,7 @@ export default function EditTimeSlot({
                   </button>
                   <button
                     onClick={() => {
-                      setIsEditing(false);
+                      setIsAdding(false);
                     }}
                     className="text-base border-2 border-primary px-2 sm:px-4 py-1 rounded-md bg-primary text-dark"
                   >
