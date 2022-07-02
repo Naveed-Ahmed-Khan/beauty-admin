@@ -191,7 +191,8 @@ const ApprovedTable = ({ rows }) => {
                             </td>
                             <td className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b border-white border-opacity-50 text-sm">
                               <p className="text-white whitespace-no-wrap">
-                                {/* {appointment?.Date} */}
+                                {appointment?.Date.toDate().toDateString() ||
+                                  ""}
                               </p>
                             </td>
                             <td className="px-3 py-3 sm:px-5 sm:py-3 text-center border-b border-white border-opacity-50 text-sm">

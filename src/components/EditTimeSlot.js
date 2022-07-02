@@ -12,7 +12,7 @@ export default function EditTimeSlot({
   setIsEditing,
 }) {
   const { updateCheck } = useStateContext();
-  const [date, setDate] = useState(selectedSlot.date || new Date());
+  const [date, setDate] = useState(selectedSlot.date.toDate() || new Date());
   const [allSlots, setAllSlots] = useState([]);
   const [editTime, setEditTime] = useState(false);
   const [addSlot, setAddSlot] = useState(false);
@@ -29,8 +29,9 @@ export default function EditTimeSlot({
     });
   }; */
 
-  console.log(startTime, startZone);
-  console.log(endTime, endZone);
+  // console.log(startTime, startZone);
+  // console.log(endTime, endZone);
+  // console.log(date.getDate());
 
   useEffect(() => {
     if (selectedSlot.slots.length > 0) {
@@ -83,11 +84,16 @@ export default function EditTimeSlot({
                         date !== null &&
                         allSlots.length > 0
                       ) {
+                        const selectedDate = `${date.getDate()}/${
+                          date.getMonth() + 1
+                        }/${date.getFullYear()}`;
+                        // console.log(selectedDate);
                         await updateDoc(
                           doc(appointmentsCollectionRef, selectedSlot.id),
                           {
                             slots: allSlots,
                             date: date,
+                            dateFormat: selectedDate,
                           }
                         );
                         updateCheck();

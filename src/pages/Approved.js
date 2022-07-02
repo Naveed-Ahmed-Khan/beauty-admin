@@ -203,7 +203,7 @@ const Approved = ({ rows }) => {
 
                         <td className="px-2 py-5 sm:px-5 sm:py-2  text-center border-b border-white border-opacity-50 text-sm">
                           <p className="text-white whitespace-no-wrap">
-                            {appointment?.Date}
+                            {appointment?.Date.toDate().toDateString() || ""}
                           </p>
                         </td>
                         <td className="px-3 py-2 text-center border-b border-white border-opacity-50 text-sm">

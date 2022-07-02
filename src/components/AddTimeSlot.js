@@ -62,10 +62,14 @@ export default function AddTimeSlot({ setIsAdding }) {
                         date !== null &&
                         allSlots.length > 0
                       ) {
+                        const selectedDate = `${date?.getDate()}/${
+                          date?.getMonth() + 1
+                        }/${date?.getFullYear()}`;
                         await addDoc(appointmentsCollectionRef, {
                           slots: allSlots,
                           date: date,
                           isOffday: false,
+                          dateFormat: selectedDate,
                         });
 
                         updateCheck();
