@@ -18,6 +18,14 @@ const firebaseConfig = {
   messagingSenderId: "351076444305",
   appId: "1:351076444305:web:7a4696dcc7d48f5db3f730",
 };
+/* const firebaseConfig = {
+  apiKey: "AIzaSyAWkmK5lH5wWelBt9Eskkr-4pXZE_g0Kow",
+  authDomain: "beautyapp-ef9d8.firebaseapp.com",
+  projectId: "beautyapp-ef9d8",
+  storageBucket: "beautyapp-ef9d8.appspot.com",
+  messagingSenderId: "773980202785",
+  appId: "1:773980202785:web:2308b42db9008cb2078060",
+}; */
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

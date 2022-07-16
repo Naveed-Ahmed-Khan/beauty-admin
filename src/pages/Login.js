@@ -26,9 +26,11 @@ const Login = () => {
   const signIn = async (email, password) => {
     try {
       setErrorMessage("");
-      await login(email, password);
-      console.log(user);
-      navigate("/home");
+      if (email === "admin@gmail.com" || email === "admin2@gmail.com") {
+        await login(email, password);
+        console.log(user);
+        navigate("/home");
+      }
     } catch (error) {
       console.log(error);
       setErrorMessage(error.message);
