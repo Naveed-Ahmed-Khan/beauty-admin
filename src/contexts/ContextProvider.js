@@ -84,7 +84,13 @@ export const ContextProvider = ({ children }) => {
     const initialize = () => {
       setUsers(usersData);
       setAppointments(appointmentData);
-      setAvailability(availabilityData);
+      setAvailability(
+        availabilityData.sort(function (x, y) {
+          let a = x.date.toDate().getTime(),
+            b = y.date.toDate().getTime();
+          return b - a;
+        })
+      );
     };
     initialize();
     // setIsLoading(false);

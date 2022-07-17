@@ -134,7 +134,7 @@ export default function EditTimeSlot({
                               clearIcon={null}
                               disableClock
                               onChange={(time) => {
-                                setStartTime(time + "" + startZone);
+                                setStartTime(time);
                               }}
                               value={startTime}
                             />
@@ -155,7 +155,7 @@ export default function EditTimeSlot({
                               clearIcon={null}
                               disableClock
                               onChange={(time) => {
-                                setEndTime(time + "" + endZone);
+                                setEndTime(time);
                               }}
                               value={endTime}
                             />
@@ -184,8 +184,9 @@ export default function EditTimeSlot({
                               onClick={() => {
                                 allSlots.forEach((element) => {
                                   if (element.id === editSotId.id) {
-                                    element.bookingStart = startTime;
-                                    element.bookingEnd = endTime;
+                                    element.bookingStart =
+                                      startTime + startZone;
+                                    element.bookingEnd = endTime + endZone;
                                   }
                                 });
                                 updateCheck();
@@ -267,7 +268,7 @@ export default function EditTimeSlot({
                           clearIcon={null}
                           disableClock
                           onChange={(time) => {
-                            setStartTime(time + "" + startZone);
+                            setStartTime(time);
                           }}
                           value={startTime}
                         />
@@ -288,7 +289,7 @@ export default function EditTimeSlot({
                           clearIcon={null}
                           disableClock
                           onChange={(time) => {
-                            setEndTime(time + "" + endZone);
+                            setEndTime(time);
                           }}
                           value={endTime}
                         />
@@ -309,8 +310,8 @@ export default function EditTimeSlot({
                         onClick={() => {
                           allSlots.push({
                             id: Date.now(),
-                            bookingStart: startTime,
-                            bookingEnd: endTime,
+                            bookingStart: startTime + startZone,
+                            bookingEnd: endTime + endZone,
                           });
 
                           setAddSlot(false);
